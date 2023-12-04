@@ -1,0 +1,39 @@
+Operation:
+    #Name
+    Prefix: 'WRN34_10_F_2'
+    #record
+    record_words: 'Lr-100-105 PGD-AT lamda 0.1, conv2. (refine no res) HF, LF, mask = self.Filter(out) HF_fine = self.Recon(HF, mask) out = (HF_fine) + LF'
+    #Resume
+    Resume: False
+Train:
+    #Train Mehod[AT,TRADES,Natural]
+    Train_Method: 'AT'
+    #Data Rate
+    Data: 'CIFAR10'
+    #Train Epoch
+    Epoch: 110
+    #Learning
+    Lr: 0.1
+    Factor: 0
+    #Train parameter
+    clip_eps: 8
+    fgsm_step: 2
+    pgd_train: 10
+DATA:
+    #Num class
+    num_class: 10
+    # Dataset mean and std used for data normalization
+    mean: !!python/tuple [0.4914, 0.4822, 0.4465]
+    std: !!python/tuple [0.2471, 0.2435, 0.2616]
+ADV:
+    # FGSM parameters during training
+    clip_eps: 8
+    fgsm_step: 2
+    pgd_attack_test: 10
+
+    # PGD attack parameters used during validation
+    # the same clip_eps as above is used for PGD
+    pgd_attack_1: 20
+    pgd_attack_2: 100
+
+    
