@@ -51,7 +51,7 @@ def train_adversarial(net: nn.Module, epoch: int, train_loader: DataLoader, opti
 
         benign_outputs = net(adv_inputs)
         if config.Train.Factor > 0.0001:
-            label_smoothing = Variable(torch.tensor(_label_smoothing(targets, config.Train.Factor)).to(device))
+            label_smoothing = Variable(torch.tensor(_label_smoothing(targets, config.DATA.num_class, config.Train.Factor)).to(device))
             loss = LabelSmoothLoss(benign_outputs, label_smoothing.float())
         else:
             loss = criterion(benign_outputs, targets)
@@ -334,7 +334,7 @@ def train_adversarial_TRADES(net: nn.Module, epoch: int, train_loader: DataLoade
         benign_outputs = net(adv_inputs)
         natural_outputs = net(inputs)
         if config.Train.Factor > 0.0001:
-            label_smoothing = Variable(torch.tensor(_label_smoothing(targets, config.Train.Factor)).to(device))
+            label_smoothing = Variable(torch.tensor(_label_smoothing(targets, config.DATA.num_class, config.Train.Factor)).to(device))
             loss_natural = LabelSmoothLoss(natural_outputs, label_smoothing.float())
         else:
             loss_natural = criterion(natural_outputs, targets)
