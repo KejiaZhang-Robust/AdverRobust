@@ -126,6 +126,7 @@ class WideResNet_F(nn.Module):
         self.Filter = SRMFilter(self.filter_size)
         self.Recon = Recalibration(self.filter_size)
 
+        #Inilization Parameters
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
