@@ -63,7 +63,7 @@ def train_adversarial(net: nn.Module, epoch: int, train_loader: DataLoader, opti
 
         total += targets.size(0)
         correct += predicted.eq(targets).sum().item()
-        train_bar.set_postfix(train_acc=round(100. * correct / total, 2))
+        train_bar.set_postfix(train_acc=round(100. * correct / total, 2), loss=loss.item())
         train_bar.update()
     train_bar.close()
     print('Total benign train accuarcy:', 100. * correct / total)
@@ -109,7 +109,7 @@ def train(net: nn.Module, epoch: int, train_loader: DataLoader, optimizer: Optim
 
         total += targets.size(0)
         correct += predicted.eq(targets).sum().item()
-        train_bar.set_postfix(train_acc=round(100. * correct / total, 2), loss=train_loss)
+        train_bar.set_postfix(train_acc=round(100. * correct / total, 2), loss=loss.item())
         train_bar.update(1)
     train_bar.close()
 

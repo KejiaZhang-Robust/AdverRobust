@@ -11,7 +11,7 @@ with open('configs_train.yml') as f:
     config = EasyDict(yaml.load(f, Loader=yaml.FullLoader))
 
 # net = WRN34_10(Num_class=config.DATA.num_class)
-net = ResNet18_F(Num_class=config.DATA.num_class)
+net = ResNet18(Num_class=config.DATA.num_class)
 
 file_name = config.Operation.Prefix
 data_set = config.Train.Data

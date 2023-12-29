@@ -127,7 +127,7 @@ def train_AWP(model, train_loader, optimizer, epoch, awp_adversary, config):
 
         model.train()
         # calculate adversarial weight perturbation
-        if epoch >= 0:
+        if epoch >= 10:
             awp = awp_adversary.calc_awp(inputs_adv=x_adv,
                                              targets=target)
             awp_adversary.perturb(awp)
@@ -149,7 +149,7 @@ def train_AWP(model, train_loader, optimizer, epoch, awp_adversary, config):
         loss.backward()
         optimizer.step()
 
-        if epoch >= 0:
+        if epoch >= 10:
             awp_adversary.restore(awp)
         
         train_bar.set_postfix(train_acc=round(100. * correct / total, 2))

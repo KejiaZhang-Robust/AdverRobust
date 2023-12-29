@@ -63,24 +63,38 @@ class CIFAR10C(datasets.VisionDataset):
         return len(self.data)
     
 class TinyImageNet(Dataset):
-    def __init__(self, dataset_type, transform=None):
-        self.root = "./data/tiny-imagenet-200/"
-        data_path = os.path.join(self.root, dataset_type)
-
-        self.dataset = torchvision.datasets.ImageFolder(root=data_path)
-
+    def __init__(self, root_dir, mode='train', transform=None):
+        self.root_dir = root_dir
+        self.mode = mode
+        self.image_paths = sorted(glob.iglob(os.path.join(self.root_dir, self.mode, '**', '*.%s' % 'JPEG'), recursive=True))
         self.transform = transform
 
-    def __getitem__(self, index):
-        img, targets = self.dataset[index]
-
-        if self.transform is not None:
-            img = self.transform(img)
-
-        return img, targets
+        self.labels = {}
+        #label2dict
+        with open(os.path.join(self.root_dir, 'wnids.txt'), 'r') as fp:
+            self.label_texts = sorted([text.strip() for text in fp.readlines()])
+        self.label_text_to_number = {text: i for i, text in enumerate(self.label_texts)}
+        if self.mode == 'train':
+            for label_text, i in self.label_text_to_number.items():
+                for cnt in range(500):
+                    self.labels['%s_%d.%s' % (label_text, cnt, 'JPEG')] = i
+                    
+        elif self.mode == 'val':
+            with open(os.path.join(self.root_dir, 'val', 'val_annotations.txt'), 'r') as fp:
+                for line in fp.readlines():
+                    terms = line.split('\t')
+                    file_name, label_text = terms[0], terms[1]
+                    self.labels[file_name] = self.label_text_to_number[label_text]
 
     def __len__(self):
-        return self.dataset.__len__()
+        return len(self.image_paths)
+
+    def __getitem__(self, idx):
+        file_path = self.image_paths[idx]
+        img = Image.open(file_path).convert('RGB')
+        if self.transform:
+            img = self.transform(img)
+        return img, self.labels[os.path.basename(file_path)]
     
 def shuffle_labels(label):
     max_val = torch.max(label).item()
@@ -153,14 +167,14 @@ def create_dataloader(dataset, Norm):
             transform_train = transforms.Compose([
                     transforms.RandomCrop(64, padding=8),
                     transforms.RandomHorizontalFlip(),
-                    transforms.ToTensor(),
+                    transforms.ToTensor()
                 ])
 
             transform_test = transforms.Compose([
                 transforms.ToTensor(),
             ])
-        train_dataset = TinyImageNet("train", transform_train)
-        testset = TinyImageNet("val", transform_test)
+        train_dataset = TinyImageNet('./data/tiny-imagenet-200','train',transform=transform_train)
+        testset = TinyImageNet('./data/tiny-imagenet-200','val',transform=transform_test)
         train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=128, shuffle=True, num_workers=8)
         test_loader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False, num_workers=8)
         return train_loader, test_loader
