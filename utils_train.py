@@ -74,7 +74,7 @@ def train_adversarial(net: nn.Module, epoch: int, train_loader: DataLoader, opti
 def _label_smoothing(label, num_class=10, factor=0.1):
     one_hot = np.eye(num_class)[label.cuda().data.cpu().numpy()]
 
-    result = one_hot * factor + (one_hot - 1.) * ((factor - 1) / float(10 - 1))
+    result = one_hot * factor + (one_hot - 1.) * ((factor - 1) / float(num_class - 1))
 
     return result
 
