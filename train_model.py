@@ -33,7 +33,7 @@ logging.basicConfig(
 net.Num_class = config.DATA.num_class
 norm_mean = torch.tensor(config.DATA.mean).to(device)
 norm_std = torch.tensor(config.DATA.std).to(device)
-if config.Train.Train_Method == 'AT' or config.Train.Train_Method == 'Constrain_AT':
+if config.Train.Train_Method == 'AT' or config.Train.Train_Method == 'TRADES':
     net.Norm = True
     net.norm_mean = norm_mean
     net.norm_std = norm_std
