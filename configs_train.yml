@@ -1,8 +1,8 @@
 Operation:
     #Name
-    Prefix: 'WRN34_10_F_2'
+    Prefix: 'WRN34_10'
     #record
-    record_words: 'Lr-100-105 PGD-AT lamda 0.1, conv2. (refine no res) HF, LF, mask = self.Filter(out) HF_fine = self.Recon(HF, mask) out = (HF_fine) + LF'
+    record_words: ''
     #Resume
     Resume: False
 Train:

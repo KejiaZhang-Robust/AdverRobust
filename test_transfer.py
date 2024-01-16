@@ -1,7 +1,7 @@
 import torch.backends.cudnn as cudnn
 
 from models import *
-from utils_test_choosing import evaluate_pgd, test_adv_auto, evaluate_normal
+from utils_test_transfer import evaluate_pgd, test_adv_auto, evaluate_normal
 from easydict import EasyDict
 import yaml
 import os
