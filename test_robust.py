@@ -27,14 +27,16 @@ logging.basicConfig(
     datefmt='%Y/%m/%d %H:%M:%S',
     level=logging.DEBUG,
     handlers=[
-        logging.FileHandler(os.path.join(check_path, file_name + '_test.log')),
+        logging.FileHandler(os.path.join(check_path, file_name + config.Operation.Addtional_string +'_test.log')),
         logging.StreamHandler()
     ])
+logger.info(config.Operation.Record_string)
+
 
 net.Num_class = config.DATA.num_class
 norm_mean = torch.tensor(config.DATA.mean).to(device)
 norm_std = torch.tensor(config.DATA.std).to(device)
-if config.Operation.Method == 'AT':
+if config.Operation.Method != 'Natural':
     net.Norm = True
     net.norm_mean = norm_mean
     net.norm_std = norm_std

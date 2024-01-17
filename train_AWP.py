@@ -69,9 +69,5 @@ for epoch in range(start_epoch+1, config.Train.Epoch+1):
     #TODO Train
     acc_train, train_loss = train_AWP(net, train_loader, optimizer, epoch, awp_adversary, config)
     #TODO Test
-    test_acc, adv_acc, loss_test = test_net(net, test_loader, config)
-    #TODO Val
-    val_test_acc, val_adv_acc, best_val_robust_acc = val_net(net, epoch, val_loader, optimizer, best_val_robust_acc, config, check_path)
-    logger.info('%-5d\t%-10.2f\t%-9.2f\t%-9.2f\t%-8.2f\t%-15.2f \t %-7.2f \t %-14.2f',
-                epoch, train_loss, acc_train, loss_test,
-                test_acc, adv_acc, val_test_acc, val_adv_acc)
+    acc_test, pgd_acc, loss_test, best_prec1 = test_net_robust(net, test_loader, epoch, optimizer, best_prec1, config, save_path=check_path)
+    logger.info('%-5d\t%-10.2f\t%-9.2f\t%-9.2f\t%-8.2f\t%.2f', epoch, train_loss, acc_train, loss_test, acc_test, pgd_acc) 

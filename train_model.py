@@ -36,7 +36,7 @@ logging.basicConfig(
 net.Num_class = config.DATA.num_class
 norm_mean = torch.tensor(config.DATA.mean).to(device)
 norm_std = torch.tensor(config.DATA.std).to(device)
-if config.Train.Train_Method == 'AT' or config.Train.Train_Method == 'TRADES':
+if config.Train.Train_Method != 'Natural':
     net.Norm = True
     net.norm_mean = norm_mean
     net.norm_std = norm_std
@@ -73,11 +73,16 @@ for epoch in range(start_epoch + 1, config.Train.Epoch + 1):
     learning_rate = adjust_learning_rate(learning_rate, optimizer, epoch, config.Train.lr_change_iter[0], config.Train.lr_change_iter[1])
     if config.Train.Train_Method == 'AT':
         acc_train, train_loss = train_adversarial(net, epoch, train_loader, optimizer, config)
+        acc_test, pgd_acc, loss_test, best_prec1 = test_net_robust(net, test_loader, epoch, optimizer, best_prec1, config, save_path=check_path)
+        logger.info('%-5d\t%-10.2f\t%-9.2f\t%-9.2f\t%-8.2f\t%.2f', epoch, train_loss, acc_train, loss_test,
+                    acc_test, pgd_acc) 
     elif config.Train.Train_Method == 'TRADES':
         acc_train, train_loss = train_adversarial_TRADES(net, epoch, train_loader, optimizer, config)
+        acc_test, pgd_acc, loss_test, best_prec1 = test_net_robust(net, test_loader, epoch, optimizer, best_prec1, config, save_path=check_path)
+        logger.info('%-5d\t%-10.2f\t%-9.2f\t%-9.2f\t%-8.2f\t%.2f', epoch, train_loss, acc_train, loss_test,
+                    acc_test, pgd_acc) 
     else:
         acc_train, train_loss = train(net, epoch, train_loader, optimizer, config)
-    # acc_test, pgd_acc, loss_test, best_prec1 = test_net_normal(net, test_loader, epoch, optimizer, best_prec1, config, save_path=check_path)
-    acc_test, pgd_acc, loss_test, best_prec1 = test_net_robust(net, test_loader, epoch, optimizer, best_prec1, config, save_path=check_path)
-    logger.info('%-5d\t%-10.2f\t%-9.2f\t%-9.2f\t%-8.2f\t%.2f', epoch, train_loss, acc_train, loss_test,
+        acc_test, pgd_acc, loss_test, best_prec1 = test_net_normal(net, test_loader, epoch, optimizer, best_prec1, config, save_path=check_path)
+        logger.info('%-5d\t%-10.2f\t%-9.2f\t%-9.2f\t%-8.2f\t%.2f', epoch, train_loss, acc_train, loss_test,
                 acc_test, pgd_acc) 
