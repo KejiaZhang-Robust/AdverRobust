@@ -1,7 +1,7 @@
 import torch.backends.cudnn as cudnn
 
 from models import *
-from utils_test_transfer import evaluate_pgd, test_adv_auto, evaluate_normal
+from utils_test_transfer import evaluate_pgd, test_adv_auto, evaluate_normal, evaluate_cw
 from easydict import EasyDict
 import yaml
 import os
@@ -14,8 +14,9 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 with open('configs_test_transfer.yml') as f:
     config = EasyDict(yaml.load(f,Loader=yaml.FullLoader))
 
-net = WRN34_10_GNN(Num_class=config.DATA.num_class)
-
+#TODO: Model generate the atack
+net = WRN34_10(Num_class=config.DATA.num_class)
+#TODO: Model defense the atack
 test_net = ResNet18(Num_class=config.DATA.num_class)
 
 data_set = config.DATA.Data
@@ -58,11 +59,15 @@ if config.Operation.Validate_Best == True:
     if config.Operation.Validate_PGD:
         ##----->FGSM
         fgsm_acc = evaluate_pgd(net, test_net, test_loader, config.ADV.clip_eps, config.ADV.fgsm_step, 1)
-        record_path_words(record_path, f"PGD_attack:[nb_iter:1,eps:{config.ADV.clip_eps},step_size:{config.ADV.fgsm_step}]->pgd_acc: {fgsm_acc: .2f}" + "\n")
+        record_path_words(record_path, f"FGSM_attack:[eps:{config.ADV.clip_eps},step_size:{config.ADV.fgsm_step}]->fgsm_acc: {fgsm_acc: .2f}" + "\n")
         ##----->PDG
         for pgd_param in config.ADV.pgd_test:
             pgd_acc = evaluate_pgd(net, test_net, test_loader, pgd_param[1], pgd_param[2], pgd_param[0])
             record_path_words(record_path, f"PGD_attack:[nb_iter:{pgd_param[0]},eps:{pgd_param[1]},step_size:{pgd_param[2]}]->pgd_acc: {pgd_acc: .2f}" + "\n")
+    if config.Operation.Validate_CW:
+        ##----->CW
+        pgd_acc = evaluate_cw(net, test_net, test_loader, config.ADV.clip_eps, config.ADV.fgsm_step, config.ADV.iter)
+        record_path_words(record_path, f"CW_attack:[nb_iter:{config.ADV.iter},eps:{config.ADV.clip_eps},step_size:{config.ADV.fgsm_step}]->cw_acc: {pgd_acc: .2f}" + "\n")
     if config.Operation.Validate_Autoattack:
         ##----->Autoattack
         auto_acc = test_adv_auto(net, test_net, test_loader, config.ADV.clip_eps, auto_attacks_methods)
@@ -79,11 +84,15 @@ if config.Operation.Validate_Last == True:
     if config.Operation.Validate_PGD:
         ##----->FGSM
         fgsm_acc = evaluate_pgd(net, test_net, test_loader, config.ADV.clip_eps, config.ADV.fgsm_step, 1)
-        record_path_words(record_path, f"PGD_attack:[nb_iter:1,eps:{config.ADV.clip_eps},step_size:{config.ADV.fgsm_step}]->pgd_acc: {fgsm_acc: .2f}" + "\n")
+        record_path_words(record_path, f"FGSM_attack:[eps:{config.ADV.clip_eps},step_size:{config.ADV.fgsm_step}]->fgsm_acc: {fgsm_acc: .2f}" + "\n")
         ##----->PDG
         for pgd_param in config.ADV.pgd_test:
             pgd_acc = evaluate_pgd(net, test_net, test_loader, pgd_param[1], pgd_param[2], pgd_param[0])
             record_path_words(record_path, f"PGD_attack:[nb_iter:{pgd_param[0]},eps:{pgd_param[1]},step_size:{pgd_param[2]}]->pgd_acc: {pgd_acc: .2f}" + "\n")
+    if config.Operation.Validate_CW:
+        ##----->CW
+        pgd_acc = evaluate_cw(net, test_net, test_loader, config.ADV.clip_eps, config.ADV.fgsm_step, config.ADV.iter)
+        record_path_words(record_path, f"CW_attack:[nb_iter:{config.ADV.iter},eps:{config.ADV.clip_eps},step_size:{config.ADV.fgsm_step}]->cw_acc: {pgd_acc: .2f}" + "\n")
     if config.Operation.Validate_Autoattack:
         ##----->Autoattack
         auto_acc = test_adv_auto(net, test_net, test_loader, config.ADV.clip_eps, auto_attacks_methods)

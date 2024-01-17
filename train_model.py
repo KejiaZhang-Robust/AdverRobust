@@ -16,9 +16,12 @@ net = ResNet18(Num_class=config.DATA.num_class)
 file_name = config.Operation.Prefix
 data_set = config.Train.Data
 check_path = os.path.join('./checkpoint', data_set, file_name)
+learning_rate = config.Train.Lr
+
+if not os.path.isdir(os.path.join('./checkpoint', data_set)):
+    os.mkdir(os.path.join('./checkpoint', data_set))
 if not os.path.isdir(check_path):
     os.mkdir(check_path)
-learning_rate = config.Train.Lr
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -67,7 +70,7 @@ else:
 
 optimizer = optim.SGD(net.parameters(), lr=learning_rate, momentum=0.9, weight_decay=5e-4)
 for epoch in range(start_epoch + 1, config.Train.Epoch + 1):
-    learning_rate = adjust_learning_rate(learning_rate, optimizer, epoch)
+    learning_rate = adjust_learning_rate(learning_rate, optimizer, epoch, config.Train.lr_change_iter[0], config.Train.lr_change_iter[1])
     if config.Train.Train_Method == 'AT':
         acc_train, train_loss = train_adversarial(net, epoch, train_loader, optimizer, config)
     elif config.Train.Train_Method == 'TRADES':

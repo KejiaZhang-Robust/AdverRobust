@@ -19,6 +19,8 @@ Train:
     clip_eps: 8
     fgsm_step: 2
     pgd_train: 10
+    #Learning Rate Change Iter
+    lr_change_iter: [100, 105]
 DATA:
     #Num class
     num_class: 10

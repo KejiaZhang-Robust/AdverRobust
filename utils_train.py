@@ -15,11 +15,11 @@ from torch.autograd import Variable
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-def adjust_learning_rate(learning_rate, optimizer, epoch):
+def adjust_learning_rate(learning_rate, optimizer, epoch, change_epoch1=100, change_epoch2=105):
     lr = learning_rate
-    if epoch >= 100:
+    if epoch >= change_epoch1:
         lr /= 10
-    if epoch >= 105:
+    if epoch >= change_epoch2:
         lr /= 10
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
@@ -109,7 +109,7 @@ def train(net: nn.Module, epoch: int, train_loader: DataLoader, optimizer: Optim
 
         total += targets.size(0)
         correct += predicted.eq(targets).sum().item()
-        train_bar.set_postfix(train_acc=round(100. * correct / total, 2), loss=loss.item())
+        train_bar.set_postfix(train_acc=round(100. * correct / total, 2), loss=c_ls.item())
         train_bar.update(1)
     train_bar.close()
 

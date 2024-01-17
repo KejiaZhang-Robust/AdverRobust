@@ -12,6 +12,7 @@ Operation:
     #Test attack Choosing
     Validate_Natural: True
     Validate_PGD: True
+    Validate_CW: True
     Validate_Autoattack: True
 DATA:
     #Data
@@ -25,6 +26,7 @@ ADV:
     # FGSM parameters during training
     clip_eps: 8
     fgsm_step: 2
+    iter: 10
 
     # PGD attack parameters used during validation
     # the same clip_eps as above is used for PGD
