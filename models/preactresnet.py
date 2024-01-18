@@ -1,11 +1,3 @@
-"""preactresnet in pytorch
-
-[1] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
-
-    Identity Mappings in Deep Residual Networks
-    https://arxiv.org/abs/1603.05027
-"""
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
