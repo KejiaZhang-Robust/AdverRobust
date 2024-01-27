@@ -79,5 +79,5 @@ ax2.tick_params(axis='both', which='major', labelsize=16)
 
 # 显示图形
 plt.tight_layout()
-plt.savefig('eplison_GNN.pdf', format='pdf')
+# plt.savefig('eplison_GNN.pdf', format='pdf')
 plt.show()

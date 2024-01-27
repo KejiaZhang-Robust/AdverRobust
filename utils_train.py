@@ -356,6 +356,50 @@ def train_adversarial_TRADES(net: nn.Module, epoch: int, train_loader: DataLoade
 
     return 100. * correct / total, train_loss
 
+def train_adversarial_MART(net: nn.Module, epoch: int, train_loader: DataLoader, optimizer: Optimizer,
+          config: Any, beta=6.0) -> Tuple[float, float]:
+    print('\n[ Epoch: %d ]' % epoch)
+    net.train()
+    train_loss = 0
+    correct = 0
+    total = 0
+    train_bar = tqdm(total=len(train_loader), desc=f'>>')
+    for batch_idx, (inputs, targets) in enumerate(train_loader):
+        inputs, targets = inputs.to(device), targets.to(device)
+        kl = nn.KLDivLoss(reduction='none')
+        adv_inputs = pgd_attack(net, inputs, targets, config.Train.clip_eps / 255.,
+                                config.Train.fgsm_step / 255., config.Train.pgd_train)
+
+        optimizer.zero_grad()
+        logits = net(inputs)
+        logits_adv = net(adv_inputs)
+        adv_probs = F.softmax(logits_adv, dim=1)
+
+        tmp1 = torch.argsort(adv_probs, dim=1)[:, -2:]
+        new_y = torch.where(tmp1[:, -1] == y, tmp1[:, -2], tmp1[:, -1])
+        loss_adv = F.cross_entropy(logits_adv, y) + F.nll_loss(torch.log(1.0001 - adv_probs + 1e-12), new_y)
+        nat_probs = F.softmax(logits, dim=1)
+        true_probs = torch.gather(nat_probs, 1, (y.unsqueeze(1)).long()).squeeze()
+        loss_robust = (1.0 / len(inputs)) * torch.sum(
+            torch.sum(kl(torch.log(adv_probs + 1e-12), nat_probs), dim=1) * (1.0000001 - true_probs))
+        loss = loss_adv + float(beta) * loss_robust
+        loss.backward()
+
+        optimizer.step()
+        train_loss += loss.item()
+        _, predicted = logits_adv.max(1)
+
+        total += targets.size(0)
+        correct += predicted.eq(targets).sum().item()
+        train_bar.set_postfix(train_acc=round(100. * correct / total, 2), loss=loss.item())
+        train_bar.update()
+    train_bar.close()
+    print('Total benign train accuarcy:', 100. * correct / total)
+    print('Total benign train loss:', train_loss)
+
+    return 100. * correct / total, train_loss
+
+
 def get_pred(out, labels):
     pred = out.sort(dim=-1, descending=True)[1][:, 0]
     second_pred = out.sort(dim=-1, descending=True)[1][:, 1]
