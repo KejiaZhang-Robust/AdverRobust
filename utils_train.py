@@ -376,10 +376,10 @@ def train_adversarial_MART(net: nn.Module, epoch: int, train_loader: DataLoader,
         adv_probs = F.softmax(logits_adv, dim=1)
 
         tmp1 = torch.argsort(adv_probs, dim=1)[:, -2:]
-        new_y = torch.where(tmp1[:, -1] == y, tmp1[:, -2], tmp1[:, -1])
-        loss_adv = F.cross_entropy(logits_adv, y) + F.nll_loss(torch.log(1.0001 - adv_probs + 1e-12), new_y)
+        new_y = torch.where(tmp1[:, -1] == targets, tmp1[:, -2], tmp1[:, -1])
+        loss_adv = F.cross_entropy(logits_adv, targets) + F.nll_loss(torch.log(1.0001 - adv_probs + 1e-12), new_y)
         nat_probs = F.softmax(logits, dim=1)
-        true_probs = torch.gather(nat_probs, 1, (y.unsqueeze(1)).long()).squeeze()
+        true_probs = torch.gather(nat_probs, 1, (targets.unsqueeze(1)).long()).squeeze()
         loss_robust = (1.0 / len(inputs)) * torch.sum(
             torch.sum(kl(torch.log(adv_probs + 1e-12), nat_probs), dim=1) * (1.0000001 - true_probs))
         loss = loss_adv + float(beta) * loss_robust
