@@ -8,7 +8,7 @@ Operation:
 Train:
     #Train Mehod[AT,TRADES,Natural]
     Train_Method: 'AT'
-    #Data Rate
+    #Dataset [CIAFR10,CIFAR100,TinyImageNet,Imagenette]
     Data: 'CIFAR10'
     #Train Epoch
     Epoch: 110

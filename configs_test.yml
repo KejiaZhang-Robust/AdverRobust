@@ -16,7 +16,7 @@ Operation:
     Validate_CW: True
     Validate_Autoattack: True
 DATA:
-    #Data
+    #Dataset [CIAFR10,CIFAR100,TinyImageNet,Imagenette]
     Data: 'CIFAR10'
     #Num class
     num_class: 10

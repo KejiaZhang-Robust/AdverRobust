@@ -3,12 +3,12 @@ import numpy as np
 
 # 数据
 epsilon = [4, 8, 12, 16]
-PGD_AT = [73.26, 56.07, 42.21, 33.97]
-FMR_GC_AT = [74.87, 58.97, 45.67, 39.44]
-FMR_GC_AT_1 = [73.96,57.03,37.61,24.28]
-PGD_AT_1 = [72.03,54.21,34.23,17.28]
+PGD_AT = [73.26, 55.17, 41.24, 34.04]
+FMR_GC_AT = [74.83, 58.67, 45.53, 39.04]
+FMR_GC_AT_1 = [74.09,55.69,37.75,21.97]
+PGD_AT_1 = [72.23,53.51,33.18,17.66]
 # 创建一个新的图形
-fig, (ax, ax2) = plt.subplots(1, 2, figsize=(12, 7))
+fig, (ax, ax2) = plt.subplots(1, 2, figsize=(15,6))
 
 # 设置柱状图的宽度和位置
 width = 0.3
@@ -16,7 +16,7 @@ x = np.arange(len(epsilon))
 
 # 创建柱状图
 rects1 = ax.bar(x - width/2, PGD_AT, width-0.02, label='PGD-AT', color='teal', alpha=0.8)
-rects2 = ax.bar(x + width/2, FMR_GC_AT, width-0.02, label='FMR-GC-AT', color='darkorange', alpha=0.8)
+rects2 = ax.bar(x + width/2, FMR_GC_AT, width-0.02, label='HFDR-AT', color='darkorange', alpha=0.8)
 
 # 创建折线图
 ax.plot(x- width/2, PGD_AT, color='grey', marker='v', markeredgecolor = 'black', alpha=0.8, markersize=10, linewidth=2)
@@ -47,7 +47,7 @@ ax.tick_params(axis='both', which='major', labelsize=15)
 
 # 创建柱状图
 rects1 = ax2.bar(x - width/2, PGD_AT_1, width-0.02, label='PGD-AT', color='teal', alpha=0.8)
-rects2 = ax2.bar(x + width/2, FMR_GC_AT_1, width-0.02, label='FMR-GC-AT', color='darkorange', alpha=0.8)
+rects2 = ax2.bar(x + width/2, FMR_GC_AT_1, width-0.02, label='HFDR-AT', color='darkorange', alpha=0.8)
 
 # 创建折线图
 ax2.plot(x- width/2, PGD_AT_1, color='grey', marker='v', markeredgecolor = 'black', alpha=0.8, markersize=10, linewidth=2)
@@ -79,5 +79,5 @@ ax2.tick_params(axis='both', which='major', labelsize=16)
 
 # 显示图形
 plt.tight_layout()
-# plt.savefig('eplison_GNN.pdf', format='pdf')
+plt.savefig('eplison_HFDR.pdf', format='pdf')
 plt.show()

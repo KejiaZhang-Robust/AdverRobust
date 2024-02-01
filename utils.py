@@ -179,6 +179,34 @@ def create_dataloader(dataset, Norm):
         train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=128, shuffle=True, num_workers=8)
         test_loader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False, num_workers=8)
         return train_loader, test_loader
+    if dataset == "Imagenette":
+        if Norm == True:
+            transform_train = transforms.Compose([
+                    transforms.RandomCrop(160),
+                    transforms.RandomHorizontalFlip(),
+                    transforms.ToTensor(),
+                    transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+                ])
+
+            transform_test = transforms.Compose([
+                transforms.ToTensor(),
+                transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+            ])
+        else:
+            transform_train = transforms.Compose([
+                    transforms.RandomCrop(160),
+                    transforms.RandomHorizontalFlip(),
+                    transforms.ToTensor(),
+                ])
+
+            transform_test = transforms.Compose([
+                transforms.ToTensor(),
+            ])
+        train_dataset = torchvision.datasets.ImageFolder(root='./data/imagenette2-160/train',transform=transform_train)
+        testset = torchvision.datasets.ImageFolder(root='./data/imagenette2-160/val',transform=transform_train)
+        train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=128, shuffle=True, num_workers=8)
+        test_loader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False, num_workers=8)
+        return train_loader, test_loader
     if dataset == "CIFAR10":
         if Norm == True:
             transform_train = transforms.Compose([
