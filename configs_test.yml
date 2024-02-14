@@ -30,7 +30,8 @@ ADV:
     # PGD attack parameters used during validation
     # the same clip_eps as above is used for PGD
     pgd_test:
+    - !!python/tuple [10, 8, 2]
     - !!python/tuple [20, 8, 2]
-    - !!python/tuple [100, 8, 2]
+    - !!python/tuple [50, 8, 2]
 
     
