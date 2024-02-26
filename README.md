@@ -1,2 +1,2 @@
-# Denoising_code_git
- Kejia's official repository for denoising
+# I Want A Lot of Papers!
+ Kejia's official repository for many many many paper
