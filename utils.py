@@ -97,6 +97,35 @@ class TinyImageNet(Dataset):
             img = self.transform(img)
         return img, self.labels[os.path.basename(file_path)]
     
+class Read_Dataset(Dataset):
+    def __init__(self, root_dir, mode='train', transform=None):
+        self.root_dir = root_dir
+        self.mode = mode
+        self.transform = transform
+        self.labels = {}
+        with open(os.path.join(self.root_dir, 'label.txt'), 'r') as fp:
+            self.label_texts = sorted([text.strip() for text in fp.readlines()])
+        self.label_text_to_number = {text: i for i, text in enumerate(self.label_texts)}
+        self.samples = []
+        for class_name in self.label_texts:
+            class_dir = os.path.join(self.root_dir, mode, class_name)
+            if not os.path.isdir(class_dir):
+                continue
+            for file_name in os.listdir(class_dir):
+                file_path = os.path.join(class_dir, file_name)
+                if os.path.isfile(file_path):
+                    self.samples.append((file_path, self.label_text_to_number[class_name]))
+
+    def __len__(self):
+        return len(self.samples)
+
+    def __getitem__(self, idx):
+        file_path, label = self.samples[idx]
+        image = Image.open(file_path).convert("RGB")
+        if self.transform:
+            image = self.transform(image)
+        return image, label
+    
 def shuffle_labels(label):
     max_val = torch.max(label).item()
     shuffled = torch.randint(0, max_val + 1, label.size()).to(device)
