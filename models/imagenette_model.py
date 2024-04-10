@@ -71,8 +71,8 @@ class WideResNet(nn.Module):
         # global average pooling and classifier
         self.bn1 = nn.BatchNorm2d(nChannels[3])
         self.relu = nn.ReLU(inplace=True)
-        self.fc = nn.Linear(nChannels[3]*4, num_classes)
-        self.nChannels = nChannels[3]*4
+        self.fc = nn.Linear(nChannels[3]*25, num_classes)
+        self.nChannels = nChannels[3]*25
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -166,7 +166,7 @@ class ResNet(nn.Module):
         self.layer2 = self._make_layer(block, 128, num_blocks[1], stride=2)
         self.layer3 = self._make_layer(block, 256, num_blocks[2], stride=2)
         self.layer4 = self._make_layer(block, 512, num_blocks[3], stride=2)
-        self.linear = nn.Linear(512*block.expansion*4, num_classes)
+        self.linear = nn.Linear(512*block.expansion*25, num_classes)
 
     def _make_layer(self, block, planes, num_blocks, stride):
         strides = [stride] + [1]*(num_blocks-1)
