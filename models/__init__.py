@@ -4,4 +4,5 @@ from .utils import *
 from .Inception import *
 from .vgg import *
 from .Non_local_fliter import *
-from .wrn34_fsr import *
+from .resent_fsr import *
+from .resnet_fpcm import *
