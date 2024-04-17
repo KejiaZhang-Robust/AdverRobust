@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from collections import OrderedDict
 from tqdm import tqdm
 from torch.autograd import Variable
-from utils_train import pgd_attack,LabelSmoothLoss,_label_smoothing,mask_constrain_loss
+from utils_train import pgd_attack,LabelSmoothLoss,_label_smoothing
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
