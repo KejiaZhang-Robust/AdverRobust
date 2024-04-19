@@ -52,10 +52,10 @@ if config.Operation.Resume == True:
     checkpoint = torch.load(os.path.join(check_path, 'checkpoint.pth.tar'))
     net.load_state_dict(checkpoint['state_dict'])
     start_epoch = checkpoint['epoch']
-    best_val_robust_acc = checkpoint['best_prec1']
+    best_prec1 = checkpoint['best_prec1']
 else:
     start_epoch = 0
-    best_val_robust_acc = 0
+    best_prec1 = 0
     logger.info(config.Operation.record_words)
     logger.info('%-5s\t%-10s\t%-9s\t%-9s\t%-8s\t%-15s \t %-7s \t %-14s',
                 'Epoch','Train Loss','Train Acc','Test Loss','Test Acc','Test Robust Acc','Val Acc','Val Robust Acc')
