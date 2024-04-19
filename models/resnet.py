@@ -93,19 +93,19 @@ class ResNet(nn.Module):
         out = self.linear(out)
         return out
 
-def ResNet18(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def ResNet18(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return ResNet(BasicBlock, [2,2,2,2], num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)
 
-def ResNet34(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def ResNet34(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return ResNet(BasicBlock, [3,4,6,3], num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)
 
-def ResNet50(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def ResNet50(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return ResNet(Bottleneck, [3,4,6,3], num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)
 
-def ResNet101(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def ResNet101(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return ResNet(Bottleneck, [3,4,23,3], num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)
 
-def ResNet152(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def ResNet152(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return ResNet(Bottleneck, [3,8,36,3], num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)
 
 class ResNet_F(nn.Module):
@@ -152,5 +152,5 @@ class ResNet_F(nn.Module):
         out_1 = self.linear(out)
         return out_1
 
-def ResNet18_F(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def ResNet18_F(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return ResNet_F(BasicBlock, [2,2,2,2], num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)

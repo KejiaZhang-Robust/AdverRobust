@@ -96,7 +96,7 @@ class WideResNet(nn.Module):
         out = out.view(-1, self.nChannels)
         return self.fc(out)
 
-def WRN34_10_Tiny(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def WRN34_10_Tiny(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return WideResNet(num_classes=Num_class, depth=34, widen_factor=10, norm=Norm, mean=norm_mean, std=norm_std)
 
 class BasicBlock(nn.Module):
@@ -189,5 +189,5 @@ class ResNet(nn.Module):
         out = self.linear(out)
         return out
 
-def ResNet18_Tiny(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def ResNet18_Tiny(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return ResNet(BasicBlock, [2,2,2,2], num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)

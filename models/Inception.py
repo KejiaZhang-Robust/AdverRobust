@@ -323,5 +323,5 @@ class InceptionV3(nn.Module):
         x = self.linear(x)
         return x
     
-def InceptionV3(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def InceptionV3(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return InceptionV3(num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)

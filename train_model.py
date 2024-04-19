@@ -36,16 +36,12 @@ logging.basicConfig(
 net.Num_class = config.DATA.num_class
 norm_mean = torch.tensor(config.DATA.mean).to(device)
 norm_std = torch.tensor(config.DATA.std).to(device)
-if config.Train.Train_Method != 'Natural':
-    net.Norm = True
-    net.norm_mean = norm_mean
-    net.norm_std = norm_std
-    Data_norm = False
-    logger.info('Adversarial Training || net: '+config.Operation.Prefix + ' || '+config.Train.Train_Method)
-else:
-    net.Norm = False
-    Data_norm = True
-    logger.info('Natural Training || net: '+config.Operation.Prefix)
+# place Norm layer in the first layer of the network
+net.Norm = True
+net.norm_mean = norm_mean
+net.norm_std = norm_std
+Data_norm = False
+logger.info(config.Train.Train_Method + ' || net: '+config.Operation.Prefix + ' || '+config.Train.Train_Method)
 
 train_loader, test_loader = create_dataloader(data_set, Norm=Data_norm)
 

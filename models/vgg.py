@@ -56,16 +56,16 @@ def make_layers(cfg, batch_norm=False):
 
     return nn.Sequential(*layers)
 
-def vgg11_bn(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def vgg11_bn(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return VGG(make_layers(cfg['A'], batch_norm=True), num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)
 
-def vgg13_bn(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def vgg13_bn(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return VGG(make_layers(cfg['B'], batch_norm=True), num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)
 
-def vgg16_bn(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def vgg16_bn(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return VGG(make_layers(cfg['D'], batch_norm=True), num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)
 
-def vgg19_bn(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def vgg19_bn(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return VGG(make_layers(cfg['E'], batch_norm=True), num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)
 
 

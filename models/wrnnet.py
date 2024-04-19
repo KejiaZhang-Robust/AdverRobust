@@ -153,8 +153,8 @@ class WideResNet_F(nn.Module):
         out_1 = self.fc(out)
         return out_1
 
-def WRN34_10(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def WRN34_10(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return WideResNet(num_classes=Num_class, depth=34, widen_factor=10, norm=Norm, mean=norm_mean, std=norm_std)
 
-def WRN34_10_F(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def WRN34_10_F(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return WideResNet_F(num_classes=Num_class, depth=34, widen_factor=10, norm=Norm, mean=norm_mean, std=norm_std)

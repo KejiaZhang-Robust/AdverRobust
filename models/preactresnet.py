@@ -112,18 +112,18 @@ class PreActResNet(nn.Module):
         return x
 
 
-def preactresnet18(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def preactresnet18(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return PreActResNet(PreActBasic, [2, 2, 2, 2], num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)
 
-def preactresnet34(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def preactresnet34(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return PreActResNet(PreActBasic, [3, 4, 6, 3], num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)
 
-def preactresnet50(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def preactresnet50(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return PreActResNet(PreActBottleNeck, [3, 4, 6, 3], num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)
 
-def preactresnet101(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def preactresnet101(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return PreActResNet(PreActBottleNeck, [3, 4, 23, 3], num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)
 
-def preactresnet152(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
+def preactresnet152(Num_class=10, Norm=True, norm_mean=None, norm_std=None):
     return PreActResNet(PreActBottleNeck, [3, 8, 36, 3], num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)
 
