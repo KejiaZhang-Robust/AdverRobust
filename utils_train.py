@@ -223,6 +223,25 @@ def pgd_attack(model: nn.Module, x: Tensor, y: Tensor, epsilon: float, alpha: fl
 
     return x_adv.detach()
 
+def pgd_attack_TRADES(model: nn.Module, x: Tensor, y: Tensor, epsilon: float, alpha: float, iters: int) -> Tensor:
+    x_adv = x.detach() + torch.zeros_like(x).uniform_(-epsilon, epsilon)
+    x_adv = torch.clamp(x_adv, 0, 1)
+    criterion = nn.CrossEntropyLoss()
+
+    for _ in range(iters):
+        x_adv.requires_grad = True
+        logits = model(x_adv)
+        loss = criterion(logits, y)
+        loss_1 = F.kl_div(F.log_softmax(logits, dim=1),
+                                F.softmax(model(x), dim=1),
+                                reduction='batchmean')
+        grad = torch.autograd.grad(loss + loss_1, x_adv)[0]
+        x_adv = x_adv.detach() + alpha * torch.sign(grad.detach())
+        x_adv = torch.min(torch.max(x_adv, x - epsilon), x + epsilon)
+        x_adv = torch.clamp(x_adv, 0, 1)
+
+    return x_adv.detach()
+
 def test_pgd(net: nn.Module, test_loader: DataLoader, config: Any) -> float:
     net.eval()
     adv_correct = 0
@@ -328,7 +347,7 @@ def train_adversarial_TRADES(net: nn.Module, epoch: int, train_loader: DataLoade
     train_bar = tqdm(total=len(train_loader), desc=f'>>')
     for batch_idx, (inputs, targets) in enumerate(train_loader):
         inputs, targets = inputs.to(device), targets.to(device)
-        adv_inputs = pgd_attack(net, inputs, targets, config.Train.clip_eps / 255.,
+        adv_inputs = pgd_attack_TRADES(net, inputs, targets, config.Train.clip_eps / 255.,
                                 config.Train.fgsm_step / 255., config.Train.pgd_train)
         optimizer.zero_grad()
         benign_outputs = net(adv_inputs)
