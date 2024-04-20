@@ -231,11 +231,10 @@ def pgd_attack_TRADES(model: nn.Module, x: Tensor, y: Tensor, epsilon: float, al
     for _ in range(iters):
         x_adv.requires_grad = True
         logits = model(x_adv)
-        loss = criterion(logits, y)
-        loss_1 = F.kl_div(F.log_softmax(logits, dim=1),
+        loss_kl = F.kl_div(F.log_softmax(logits, dim=1),
                                 F.softmax(model(x), dim=1),
                                 reduction='batchmean')
-        grad = torch.autograd.grad(loss + loss_1, x_adv)[0]
+        grad = torch.autograd.grad(loss_kl, x_adv)[0]
         x_adv = x_adv.detach() + alpha * torch.sign(grad.detach())
         x_adv = torch.min(torch.max(x_adv, x - epsilon), x + epsilon)
         x_adv = torch.clamp(x_adv, 0, 1)
