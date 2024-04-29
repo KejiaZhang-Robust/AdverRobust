@@ -10,10 +10,10 @@ from utils import *
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-net = ResNet18()
-
 with open('configs_test.yml') as f:
     config = EasyDict(yaml.load(f, Loader=yaml.FullLoader))
+
+net = ResNet18(Num_class=config.DATA.num_class)
 
 file_name = config.Operation.Prefix
 data_set = config.DATA.Data
