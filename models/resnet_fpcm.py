@@ -153,36 +153,3 @@ class ResNet18_FNet(nn.Module):
 
 def ResNet18_fpcm(Num_class=10, Norm=False, norm_mean=None, norm_std=None):
     return ResNet18_FNet(BasicBlock, [2,2,2,2], num_classes=Num_class, norm=Norm, mean=norm_mean, std=norm_std)
-# def train_adversarial_fpcm(net: nn.Module, epoch: int, train_loader: DataLoader, optimizer: Optimizer,
-#           config: Any) -> Tuple[float, float]:
-#     print('\n[ Epoch: %d ]' % epoch)
-#     net.train()
-#     train_loss = 0
-#     correct = 0
-#     total = 0
-#     criterion = nn.CrossEntropyLoss()
-#     train_bar = tqdm(total=len(train_loader), desc=f'>>')
-#     for batch_idx, (inputs, targets) in enumerate(train_loader):
-#         inputs, targets = inputs.to(device), targets.to(device)
-#         adv_inputs = pgd_attack(net, inputs, targets, config.Train.clip_eps / 255.,
-#                                 config.Train.fgsm_step / 255., config.Train.pgd_train)
-
-#         optimizer.zero_grad()
-
-#         benign_outputs = net(adv_inputs, epoch)
-#         loss = criterion(benign_outputs, targets)
-#         loss.backward()
-
-#         optimizer.step()
-#         train_loss += loss.item()
-#         _, predicted = benign_outputs.max(1)
-
-#         total += targets.size(0)
-#         correct += predicted.eq(targets).sum().item()
-#         train_bar.set_postfix(train_acc=round(100. * correct / total, 2))
-#         train_bar.update()
-#     train_bar.close()
-#     print('Total benign train accuarcy:', 100. * correct / total)
-#     print('Total benign train loss:', train_loss)
-
-#     return 100. * correct / total, train_loss
