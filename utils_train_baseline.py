@@ -208,3 +208,11 @@ def train_adversarial_UIAT(net: nn.Module, epoch: int, train_loader: DataLoader,
     train_bar.close()
 
     return 100. * correct / total, train_loss
+
+    
+def get_pred(out, labels):
+    pred = out.sort(dim=-1, descending=True)[1][:, 0]
+    second_pred = out.sort(dim=-1, descending=True)[1][:, 1]
+    adv_label = torch.where(pred == labels, second_pred, pred)
+
+    return adv_label
