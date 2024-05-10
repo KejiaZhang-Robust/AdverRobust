@@ -1,49 +1,47 @@
 Operation:
-    #Name
-    Prefix: 'WRN34_10'
-    #record
-    record_words: ''
-    #Resume
-    Resume: False
+  #Name
+  Prefix: "WRN34_10"
+  #record
+  record_words: ""
+  #Resume
+  Resume: False
 Train:
-    #Train Mehod[AT,TRADES,Natural]
-    Train_Method: 'AT'
-    #Dataset [CIAFR10,CIFAR100,TinyImageNet,Imagenette]
-    Data: 'CIFAR10'
-    #Train Epoch
-    Epoch: 110
-    #Learning
-    # Warning: For Imagenette, the learning rate should be 0.01
-    Lr: 0.1
-    Factor: 0
-    #Train parameter
-    clip_eps: 8
-    fgsm_step: 2
-    pgd_train: 10
-    #Learning Rate Change Iter
-    lr_change_iter: [100, 105]
+  #Train Mehod[AT,TRADES,Natural]
+  Train_Method: "AT"
+  #Dataset [CIAFR10,CIFAR100,TinyImageNet,Imagenette]
+  Data: "CIFAR10"
+  #Train Epoch
+  Epoch: 110
+  #Learning
+  # Warning: For Imagenette, the learning rate should be 0.01
+  Lr: 0.1
+  Factor: 0
+  #Train parameter
+  clip_eps: 8
+  fgsm_step: 2
+  pgd_train: 10
+  #Learning Rate Change Iter
+  lr_change_iter: [100, 105]
 DATA:
-    #Num class
-    num_class: 10
-    # Dataset mean and std used for data normalization
-    # CIFAR-10
-    mean: !!python/tuple [0.4914, 0.4822, 0.4465]
-    std: !!python/tuple [0.2471, 0.2435, 0.2616]
-    # # CIFAR-100
-    # mean: !!python/tuple [0.5071, 0.4867, 0.4408]
-    # std: !!python/tuple [0.2675, 0.2565, 0.2761]
-    # # TinyImageNet & Imagenette
-    # mean: !!python/tuple [0.485, 0.456, 0.406]
-    # std: !!python/tuple [0.229, 0.224, 0.225]
+  #Num class
+  num_class: 10
+  # Dataset mean and std used for data normalization
+  # CIFAR-10
+  mean: !!python/tuple [0.4914, 0.4822, 0.4465]
+  std: !!python/tuple [0.2471, 0.2435, 0.2616]
+  # # CIFAR-100
+  # mean: !!python/tuple [0.5071, 0.4867, 0.4408]
+  # std: !!python/tuple [0.2675, 0.2565, 0.2761]
+  # # TinyImageNet & Imagenette
+  # mean: !!python/tuple [0.485, 0.456, 0.406]
+  # std: !!python/tuple [0.229, 0.224, 0.225]
 ADV:
-    # FGSM parameters during training
-    clip_eps: 8
-    fgsm_step: 2
-    pgd_attack_test: 10
+  # FGSM parameters during training
+  clip_eps: 8
+  fgsm_step: 2
+  pgd_attack_test: 10
 
-    # PGD attack parameters used during validation
-    # the same clip_eps as above is used for PGD
-    pgd_attack_1: 20
-    pgd_attack_2: 100
-
-    
+  # PGD attack parameters used during validation
+  # the same clip_eps as above is used for PGD
+  pgd_attack_1: 20
+  pgd_attack_2: 100
