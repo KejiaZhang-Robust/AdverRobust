@@ -216,3 +216,59 @@ def get_pred(out, labels):
     adv_label = torch.where(pred == labels, second_pred, pred)
 
     return adv_label
+
+#TODO: CVPR-2023 "CFA: Class-wise Calibrated Fair Adversarial Training"
+def CW_loss(x, y):
+    x_sorted, ind_sorted = x.sort(dim=1)
+    ind = (ind_sorted[:, -1] == y).float()
+
+    loss_value = -(x[torch.arange(x.shape[0]), y] - x_sorted[:, -2] * ind - x_sorted[:, -1] * (1. - ind))
+    return loss_value.mean()
+
+def cw_Linf_attack(model: nn.Module, x: Tensor, y: Tensor, epsilon: float, alpha: float, iters: int) -> Tensor:
+    x_adv = x.detach() + torch.zeros_like(x).uniform_(-epsilon, epsilon)
+    x_adv = torch.clamp(x_adv, 0, 1)
+
+    for _ in range(iters):
+        x_adv.requires_grad = True
+        logits = model(x_adv)
+        loss = CW_loss(logits, y)
+        loss.backward()
+        grad = x_adv.grad.detach()
+
+        x_adv = x_adv.detach() + alpha * torch.sign(grad)
+        x_adv = torch.min(torch.max(x_adv, x - epsilon), x + epsilon)
+        x_adv = torch.clamp(x_adv, 0, 1)
+
+    return x_adv.detach()
+
+def train_adversarial_CFA(net: nn.Module, epoch: int, train_loader: DataLoader, optimizer: Optimizer,
+          config: Any) -> Tuple[float, float]:
+    print('\n[ Epoch: %d ]' % epoch)
+    net.train()
+    train_loss = 0
+    correct = 0
+    total = 0
+    criterion = nn.CrossEntropyLoss()
+    train_bar = tqdm(total=len(train_loader), desc=f'>>')
+    for batch_idx, (inputs, targets) in enumerate(train_loader):
+        inputs, targets = inputs.to(device), targets.to(device)
+        adv_inputs = cw_Linf_attack(net, inputs, targets, config.Train.clip_eps / 255.,
+                                config.Train.fgsm_step / 255., config.Train.pgd_train)
+        optimizer.zero_grad()
+        adv_outputs = net(adv_inputs)
+        loss_logits = criterion(adv_outputs, targets)
+        loss = loss_logits
+        loss.backward()
+
+        optimizer.step()
+        train_loss += loss.item()
+        _, predicted = net(adv_inputs).max(1)
+
+        total += targets.size(0)
+        correct += predicted.eq(targets).sum().item()
+        train_bar.set_postfix(acc=round(100. * correct / total, 2), loss=loss.item())
+        train_bar.update()
+    train_bar.close()
+
+    return 100. * correct / total, train_loss
