@@ -209,7 +209,7 @@ def SSA_Attack(model: nn.Module, x: Tensor, y: Tensor, epsilon: float):
     adv_img = Spectrum_Simulation_Attack(x, y, model, images_min, images_max)
     return adv_img
 
-def evaluate_SSA(net: nn.Module, test_loader: DataLoader, eps) -> float:
+def evaluate_SSA(net: nn.Module, test_net:nn.Module, test_loader: DataLoader, eps) -> float:
     net.eval()
     adv_correct = 0
     total = 0
@@ -219,7 +219,7 @@ def evaluate_SSA(net: nn.Module, test_loader: DataLoader, eps) -> float:
         total += targets.size(0)
         adv = SSA_Attack(net,inputs,targets, eps)
         with torch.no_grad():
-            adv_outputs = net(adv)
+            adv_outputs = test_net(adv)
         _, predicted = adv_outputs.max(1)
         adv_correct += predicted.eq(targets).sum().item()
         if total % 100 == 0:

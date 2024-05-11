@@ -1,37 +1,35 @@
 Operation:
-    Prefix_generate: 'ResNet101'
-    Prefix_test: 'VGG16'
-    #Proposed Method Edit Prefix
-    #====== Feature Reconstruction With Seleted 725 Componets(Conv1.)======
-    Addtional_string: ''
-    Record_string: ''
-    #Validate Best
-    Validate_Best: True
-    #Validate Last
-    Validate_Last: True
-    #Test attack Choosing
-    Validate_Natural: True
-    Validate_PGD: True
-    Validate_CW: True
-    Validate_Autoattack: True
+  Prefix_generate: "ResNet101"
+  Prefix_test: "VGG16"
+  #Proposed Method Edit Prefix
+  #====== Feature Reconstruction With Seleted 725 Componets(Conv1.)======
+  Addtional_string: ""
+  Record_string: ""
+  #Validate Best
+  Validate_Best: True
+  #Validate Last
+  Validate_Last: True
+  #Test attack Choosing
+  Validate_Natural: True
+  Validate_PGD: True
+  Validate_CW: True
+  Validate_Autoattack: True
 DATA:
-    #Data
-    Data: 'CIFAR10'
-    #Num class
-    num_class: 10
-    # Dataset mean and std used for data normalization
-    mean: !!python/tuple [0.4914, 0.4822, 0.4465]
-    std: !!python/tuple [0.2471, 0.2435, 0.2616]
+  #Data
+  Data: "CIFAR10"
+  #Num class
+  num_class: 10
+  # Dataset mean and std used for data normalization
+  mean: !!python/tuple [0.4914, 0.4822, 0.4465]
+  std: !!python/tuple [0.2471, 0.2435, 0.2616]
 ADV:
-    # FGSM parameters during training
-    clip_eps: 8
-    fgsm_step: 2
-    iter: 10
+  # FGSM parameters during training
+  clip_eps: 8
+  fgsm_step: 2
+  iter: 10
 
-    # PGD attack parameters used during validation
-    # the same clip_eps as above is used for PGD
-    pgd_test:
+  # PGD attack parameters used during validation
+  # the same clip_eps as above is used for PGD
+  pgd_test:
     - !!python/tuple [20, 8, 2]
     - !!python/tuple [100, 8, 2]
-
-    
