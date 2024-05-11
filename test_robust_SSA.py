@@ -36,7 +36,20 @@ logging.basicConfig(
     ])
 logger.info(config.Operation.Record_string)
 
-_, test_loader = create_dataloader(data_set, Norm=config.DATA.Data_Norm)
+_, test_loader = create_dataloader(data_set, Norm=False)
+
+norm_mean = torch.tensor(config.DATA.mean).to(device)
+norm_std = torch.tensor(config.DATA.std).to(device)
+
+net.Num_class = config.DATA.num_class
+net.norm = True
+net.mean = norm_mean
+net.std = norm_std
+
+test_net.Num_class = config.DATA.num_class
+test_net.norm = True
+test_net.mean = norm_mean
+test_net.std = norm_std
 
 net = net.to(device)
 net = torch.nn.DataParallel(net)  # parallel GPU

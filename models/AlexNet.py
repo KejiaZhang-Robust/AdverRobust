@@ -21,7 +21,7 @@ class AlexNet_class(nn.Module):
         self.linear2 = nn.Linear(1024, 512)
         self.linear3 = nn.Linear(512, self.num_classes)
 
-    def forward(self, x, is_eval=False):
+    def forward(self, x):
         x = x.to(device)
         if self.norm == True:
             x = Normalization(x, self.mean, self.std)

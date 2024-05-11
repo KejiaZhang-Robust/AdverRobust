@@ -16,9 +16,16 @@ with open('configs_train.yml') as f:
 net = WRN34_10_F(Num_class=config.DATA.num_class)
 proxy = WRN34_10_F(Num_class=config.DATA.num_class)
 
-net.Norm = True
-net.norm_mean = torch.tensor(config.DATA.mean).to(device)
-net.norm_std = torch.tensor(config.DATA.std).to(device)
+net.num_class = config.DATA.num_class
+net.norm = True
+net.mean = torch.tensor(config.DATA.mean).to(device)
+net.std = torch.tensor(config.DATA.std).to(device)
+
+proxy.num_class = config.DATA.num_class
+proxy.norm = True
+proxy.mean = torch.tensor(config.DATA.mean).to(device)
+proxy.std = torch.tensor(config.DATA.std).to(device)
+
 file_name = config.Operation.Prefix
 data_set = config.Train.Data
 learning_rate = config.Train.Lr

@@ -32,20 +32,14 @@ logging.basicConfig(
     ])
 logger.info(config.Operation.Record_string)
 
-
-net.Num_class = config.DATA.num_class
 norm_mean = torch.tensor(config.DATA.mean).to(device)
 norm_std = torch.tensor(config.DATA.std).to(device)
-if config.Operation.Method != 'Natural':
-    net.Norm = True
-    net.norm_mean = norm_mean
-    net.norm_std = norm_std
-    Data_norm = False
-    logger.info("Adversarial Training Model Robustness")
-else: 
-    net.Norm = False
-    Data_norm = True
-    logger.info("Natural Training Model Robustness")
+net.num_class = config.DATA.num_class
+net.norm = True
+net.mean = norm_mean
+net.std = norm_std
+Data_norm = False
+logger.info("Training Model:"+config.Operation.Method+" Robustness")
 
 _, test_loader = create_dataloader(data_set, Norm=Data_norm)
 
