@@ -12,7 +12,7 @@ cfg = {
 
 class VGG(nn.Module):
 
-    def __init__(self, features, num_class=100, norm = False, mean = None, std = None):
+    def __init__(self, features, num_classes=100, norm = False, mean = None, std = None):
         super().__init__()
         self.features = features
         self.norm = norm
@@ -25,7 +25,7 @@ class VGG(nn.Module):
             nn.Linear(4096, 4096),
             nn.ReLU(inplace=True),
             nn.Dropout(),
-            nn.Linear(4096, num_class)
+            nn.Linear(4096, num_classes)
         )
 
     def forward(self, x):
