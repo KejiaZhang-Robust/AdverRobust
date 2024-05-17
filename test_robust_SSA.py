@@ -41,7 +41,7 @@ _, test_loader = create_dataloader(data_set, Norm=False)
 norm_mean = torch.tensor(config.DATA.mean).to(device)
 norm_std = torch.tensor(config.DATA.std).to(device)
 
-net.Num_class = config.DATA.num_class
+net.num_classes = config.DATA.num_class
 net.norm = True
 net.mean = norm_mean
 net.std = norm_std

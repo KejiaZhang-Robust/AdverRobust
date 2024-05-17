@@ -34,7 +34,7 @@ logging.basicConfig(
         logging.StreamHandler()
     ])
 
-net.num_class = config.DATA.num_class
+net.num_classes = config.DATA.num_class
 norm_mean = torch.tensor(config.DATA.mean).to(device)
 norm_std = torch.tensor(config.DATA.std).to(device)
 # place Norm layer in the first layer of the network

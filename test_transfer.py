@@ -40,13 +40,13 @@ logger.info(config.Operation.Record_string)
 
 _, test_loader = create_dataloader(data_set, Norm=False)
 
-net.num_class = config.DATA.num_class
+net.num_classes = config.DATA.num_class
 norm_mean = torch.tensor(config.DATA.mean).to(device)
 norm_std = torch.tensor(config.DATA.std).to(device)
 net.norm = True
 net.mean = norm_mean
 net.std = norm_std
-test_net.num_class = config.DATA.num_class
+test_net.num_classes = config.DATA.num_class
 test_net.norm = True
 test_net.mean = norm_mean
 test_net.std = norm_std
