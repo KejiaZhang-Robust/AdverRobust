@@ -1,2 +1,17 @@
 data/imagenette2-160
 data/tiny-imagenet-200
+models/__pycache__/wrnnet.cpython-311.pyc
+models/__pycache__/vgg.cpython-311.pyc
+models/__pycache__/utils.cpython-311.pyc
+models/__pycache__/resnet_fpcm.cpython-311.pyc
+models/__pycache__/resnet.cpython-311.pyc
+models/__pycache__/resent_fsr.cpython-311.pyc
+models/__pycache__/Non_local_fliter.cpython-311.pyc
+models/__pycache__/Inception.cpython-311.pyc
+models/__pycache__/__init__.cpython-311.pyc
+autoattack/__pycache__/state.cpython-311.pyc
+autoattack/__pycache__/other_utils.cpython-311.pyc
+autoattack/__pycache__/checks.cpython-311.pyc
+autoattack/__pycache__/autoattack.cpython-311.pyc
+autoattack/__pycache__/__init__.cpython-311.pyc
+__pycache__/utils_test.cpython-311.pyc

@@ -25,6 +25,13 @@ def adjust_learning_rate(learning_rate, optimizer, epoch, change_epoch1=100, cha
         param_group['lr'] = lr
     return lr
 
+def CW_loss_x(logit_x, y):
+    logitx_value,logitx_indices = torch.topk(logit_x, 2, dim=1)
+    ind = (logitx_indices[:,-2] == y).float()
+    loss_value = -(logit_x[torch.arange(logit_x.shape[0]), y] - logitx_value[:,-1]*ind-logitx_value[:,-2]*(1.-ind))
+
+    return loss_value.mean()
+
 def save_checkpoint(state, is_best, filepath):
     filename = os.path.join(filepath, 'checkpoint.pth.tar')
     # Save model
