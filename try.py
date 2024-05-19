@@ -77,18 +77,35 @@ x_sorted, ind_sorted = x.sort(dim=1)
 print(ind_sorted[:,-1])
 y = torch.tensor([2,1])
 ind = (ind_sorted[:, -1] == y).float()
+print('-------Attack false------')
 print((ind_sorted[:, -1] == y).float())
 print(x[torch.arange(x.shape[0]), y]) #输出 正确的 概率，而不是 标签
-print(x_sorted[:, -2] * ind) #输出 第二大的概率
-print(x_sorted[:, -1] * (1. - ind)) #输出 最大的概率
+print(x_sorted[:, -2] * ind) #输出 第一大的概率
+print(x_sorted[:, -1] * (1. - ind)) #输出 第二大的概率
 print(-(x[torch.arange(x.shape[0]), y] - x_sorted[:, -2] * ind - x_sorted[:, -1] * (1. - ind)))
 # 第一项 是 预测正确的，第二项 没有 预测正确
+print('---------------------------------')
+print(torch.logical_and(ind>0, ind>0).float())
 
 logitx_value,logitx_indices = torch.topk(x, 2, dim=1)
-
+print('--------输出预测第二概率--------')
+print(logitx_value[:,-1])
+print('--------输出预测第一概率--------')
+print(logitx_value[:,-2])
+print('--------输出第二的概率的标签-----')
 print(logitx_indices[:,-1]) #输出 第二的概率的标签
+print('--------输出第一的概率的标签-----')
 print(logitx_indices[:,-2]) #输出 第一的概率的标签
+print('----------真实标签------------')
+print(y)
+print('--------真实标签=预测标签-------')
 ind1 = (logitx_indices[:,-2]==y).float()
 print((logitx_indices[:,-2]==y).float())
+print('--------真实标签的预测概率-----')
+print(x[torch.arange(x.shape[0]), y])
+print('--------预测第二标签的概率-----')
+print(logitx_value[:,-1])
+print('--------预测第一标签的概率-----')
+print(logitx_value[:,-2])
 print(-(x[torch.arange(x.shape[0]), y]-logitx_value[:,-1]*ind1-logitx_value[:,-2]*(1.-ind1)))
 print(CW_loss_x(x,y))
