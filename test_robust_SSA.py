@@ -46,7 +46,7 @@ net.norm = True
 net.mean = norm_mean
 net.std = norm_std
 
-test_net.Num_class = config.DATA.num_class
+test_net.num_classes = config.DATA.num_class
 test_net.norm = True
 test_net.mean = norm_mean
 test_net.std = norm_std
