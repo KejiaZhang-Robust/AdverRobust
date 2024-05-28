@@ -16,7 +16,6 @@ from utils_train import *
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-
 #TODO: MART
 def train_adversarial_MART(net: nn.Module, epoch: int, train_loader: DataLoader, optimizer: Optimizer,
           config: Any, beta=6.0) -> Tuple[float, float]:
