@@ -39,7 +39,7 @@ net.norm = True
 net.mean = norm_mean
 net.std = norm_std
 Data_norm = False
-logger.info("Training Model:"+config.Operation.Method+" Robustness")
+logger.info("Training Model:"+config.Operation.Prefix+" Robustness")
 
 _, test_loader = create_dataloader(data_set, Norm=Data_norm)
 
