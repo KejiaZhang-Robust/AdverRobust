@@ -1,5 +1,6 @@
 data/imagenette2-160
 data/tiny-imagenet-200
+data/Tiny-Imagenet-Val
 models/__pycache__/wrnnet.cpython-311.pyc
 models/__pycache__/vgg.cpython-311.pyc
 models/__pycache__/utils.cpython-311.pyc
