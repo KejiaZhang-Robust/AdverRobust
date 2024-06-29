@@ -7,6 +7,7 @@ from .utils import *
 class AlexNet_class(nn.Module):
     def __init__(self, num_classes=10, norm=False, mean=None, std=None):
         super(AlexNet_class, self).__init__()
+        self.num_classes = num_classes
         # TODO: Implement AlexNet for cifar-10
         self.norm = norm
         self.mean = mean

@@ -62,9 +62,10 @@ class PreActBottleNeck(nn.Module):
 
 class PreActResNet(nn.Module):
 
-    def __init__(self, block, num_block, class_num=100, norm = False, mean = None, std = None):
+    def __init__(self, block, num_block, num_classes=100, norm = False, mean = None, std = None):
         super().__init__()
         self.input_channels = 64
+        self.num_classes = num_classes
         self.norm = norm
         self.mean = mean
         self.std = std
@@ -80,7 +81,7 @@ class PreActResNet(nn.Module):
         self.stage3 = self._make_layers(block, num_block[2], 256, 2)
         self.stage4 = self._make_layers(block, num_block[3], 512, 2)
 
-        self.linear = nn.Linear(self.input_channels, class_num)
+        self.linear = nn.Linear(self.input_channels, self.num_classes)
 
     def _make_layers(self, block, block_num, out_channels, stride):
         layers = []

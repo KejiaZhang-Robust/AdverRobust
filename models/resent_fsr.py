@@ -177,6 +177,7 @@ class Bottleneck(nn.Module):
 class ResNet_fsr(nn.Module):
     def __init__(self, block, num_blocks, num_classes=10, norm = False, mean = None, std = None):
         super(ResNet_fsr, self).__init__()
+        self.num_classes = num_classes
         self.in_planes = 64
         self.norm = norm
         self.mean = mean
@@ -191,7 +192,7 @@ class ResNet_fsr(nn.Module):
         self.separation = Separation(size=(512, int(64 / 8), int(64 / 8)), tau=0.1)
         self.recalibration = Recalibration(size=(512, int(64 / 8), int(8 / 8)))
         self.aux = nn.Sequential(nn.Linear(512, num_classes))
-        self.linear = nn.Linear(512*block.expansion*4, num_classes)
+        self.linear = nn.Linear(512*block.expansion*4, self.num_classes)
 
     def _make_layer(self, block, planes, num_blocks, stride):
         strides = [stride] + [1]*(num_blocks-1)

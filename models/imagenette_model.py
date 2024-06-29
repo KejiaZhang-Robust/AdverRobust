@@ -155,6 +155,7 @@ class Bottleneck(nn.Module):
 class ResNet(nn.Module):
     def __init__(self, block, num_blocks, num_classes=10, norm = False, mean = None, std = None):
         super(ResNet, self).__init__()
+        self.num_classes = num_classes
         self.in_planes = 64
         self.norm = norm
         self.mean = mean
@@ -166,7 +167,7 @@ class ResNet(nn.Module):
         self.layer2 = self._make_layer(block, 128, num_blocks[1], stride=2)
         self.layer3 = self._make_layer(block, 256, num_blocks[2], stride=2)
         self.layer4 = self._make_layer(block, 512, num_blocks[3], stride=2)
-        self.linear = nn.Linear(512*block.expansion*25, num_classes)
+        self.linear = nn.Linear(512*block.expansion*25, self.num_classes)
 
     def _make_layer(self, block, planes, num_blocks, stride):
         strides = [stride] + [1]*(num_blocks-1)

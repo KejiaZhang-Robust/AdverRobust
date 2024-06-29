@@ -143,6 +143,7 @@ class NetworkBlock(nn.Module):
 class WideResNet_FSR(nn.Module):
     def __init__(self, depth=34, num_classes=10, widen_factor=10, dropRate=0.0, norm=False, mean=None, std=None):
         super(WideResNet_FSR, self).__init__()
+        self.num_classes = num_classes
         self.norm = norm
         self.mean = mean
         self.std = std
@@ -164,7 +165,7 @@ class WideResNet_FSR(nn.Module):
         # global average pooling and classifier
         self.bn1 = nn.BatchNorm2d(nChannels[3])
         self.relu = nn.ReLU(inplace=True)
-        self.fc = nn.Linear(nChannels[3], num_classes)
+        self.fc = nn.Linear(nChannels[3], self.num_classes)
         self.nChannels = nChannels[3]
 
         self.separation = Separation(size=(640, 8, 8), tau=0.1)

@@ -14,6 +14,7 @@ class VGG(nn.Module):
 
     def __init__(self, features, num_classes=100, norm = False, mean = None, std = None):
         super().__init__()
+        self.num_classes = num_classes
         self.features = features
         self.norm = norm
         self.mean = mean
@@ -25,7 +26,7 @@ class VGG(nn.Module):
             nn.Linear(4096, 4096),
             nn.ReLU(inplace=True),
             nn.Dropout(),
-            nn.Linear(4096, num_classes)
+            nn.Linear(4096, self.num_classes)
         )
 
     def forward(self, x):
