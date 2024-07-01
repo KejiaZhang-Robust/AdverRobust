@@ -232,7 +232,7 @@ def create_dataloader(dataset, Norm):
                 transforms.ToTensor(),
             ])
         train_dataset = Read_Dataset(root_dir='./data/imagenette2-160',mode='train',transform=transform_train)
-        testset = Read_Dataset(root_dir='./data/imagenette2-160',mode='val',transform=transform_train)
+        testset = Read_Dataset(root_dir='./data/imagenette2-160',mode='val',transform=transform_test)
         train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=128, shuffle=True, num_workers=8)
         test_loader = torch.utils.data.DataLoader(testset, batch_size=50, shuffle=False, num_workers=8)
         return train_loader, test_loader
