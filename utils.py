@@ -211,24 +211,30 @@ def create_dataloader(dataset, Norm):
     if dataset == "Imagenette":
         if Norm == True:
             transform_train = transforms.Compose([
-                    transforms.RandomCrop(160),
+                    transforms.Resize((160,160)),
+                    # transforms.RandomCrop(160),
                     transforms.RandomHorizontalFlip(),
                     transforms.ToTensor(),
                     transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
                 ])
 
             transform_test = transforms.Compose([
+                transforms.Resize((160,160)),
+                # transforms.CenterCrop(160),
                 transforms.ToTensor(),
                 transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
             ])
         else:
             transform_train = transforms.Compose([
-                    transforms.RandomCrop(160),
+                    transforms.Resize((160,160)),
+                    # transforms.RandomCrop(160),
                     transforms.RandomHorizontalFlip(),
                     transforms.ToTensor(),
                 ])
 
             transform_test = transforms.Compose([
+                transforms.Resize((160,160)),
+                # transforms.CenterCrop(160),
                 transforms.ToTensor(),
             ])
         train_dataset = Read_Dataset(root_dir='./data/imagenette2-160',mode='train',transform=transform_train)
