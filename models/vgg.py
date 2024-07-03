@@ -14,7 +14,7 @@ class VGG(nn.Module):
 
     def __init__(self, features, num_classes=100, norm = False, mean = None, std = None):
         super().__init__()
-        self.num_classes = num_classes
+        self._num_classes = num_classes
         self.features = features
         self.norm = norm
         self.mean = mean
@@ -22,12 +22,19 @@ class VGG(nn.Module):
         self.classifier = nn.Sequential(
             nn.Linear(512, 4096),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
             nn.Linear(4096, 4096),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(4096, self.num_classes)
         )
+        self.fc = nn.Linear(4096, self._num_classes)
+    
+    @property
+    def num_classes(self):
+        return self._num_classes
+
+    @num_classes.setter
+    def num_classes(self, value):
+        self._num_classes = value
+        self.linear = nn.Linear(4096, self._num_classes).to(self.fc.weight.device)
 
     def forward(self, x):
         if self.norm == True:
@@ -36,7 +43,7 @@ class VGG(nn.Module):
         output = output.view(output.size()[0], -1)
         output = self.classifier(output)
 
-        return output
+        return self.fc(output)
 
 def make_layers(cfg, batch_norm=False):
     layers = []

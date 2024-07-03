@@ -7,7 +7,7 @@ from .utils import *
 class AlexNet_class(nn.Module):
     def __init__(self, num_classes=10, norm=False, mean=None, std=None):
         super(AlexNet_class, self).__init__()
-        self.num_classes = num_classes
+        self._num_classes = num_classes
         # TODO: Implement AlexNet for cifar-10
         self.norm = norm
         self.mean = mean
@@ -20,7 +20,16 @@ class AlexNet_class(nn.Module):
         self.conv5 = nn.Conv2d(256, 256, kernel_size=3, padding=1, bias=False)
         self.linear1 = nn.Linear(256 * 3 * 3, 1024)
         self.linear2 = nn.Linear(1024, 512)
-        self.linear3 = nn.Linear(512, self.num_classes)
+        self.linear3 = nn.Linear(512, self._num_classes)
+    
+    @property
+    def num_classes(self):
+        return self._num_classes
+
+    @num_classes.setter
+    def num_classes(self, value):
+        self._num_classes = value
+        self.fc = nn.Linear(512, self._num_classes).to(self.linear3.weight.device)
 
     def forward(self, x):
         x = x.to(device)

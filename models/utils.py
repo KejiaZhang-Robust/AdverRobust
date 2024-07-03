@@ -127,8 +127,8 @@ class Separation(nn.Module):
         mask = GumbelSigmoid(tau=0.1)(mask)
         mask = mask[:, 0].reshape(mask.shape[0], feature.shape[1], feature.shape[2], feature.shape[3])
 
-        HF_feat = feature * mask
-        LF_feat = feature * (1 - mask)
+        HF_feat = x * mask
+        LF_feat = x * (1 - mask)
         return HF_feat, LF_feat, mask
 
 

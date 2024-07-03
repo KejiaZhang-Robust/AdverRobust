@@ -50,7 +50,7 @@ class NetworkBlock(nn.Module):
 class WideResNet(nn.Module):
     def __init__(self, depth=34, num_classes=10, widen_factor=10, dropRate=0.0, norm = False, mean = None, std = None):
         super(WideResNet, self).__init__()
-        self.num_classes = num_classes
+        self._num_classes = num_classes
         self.norm = norm
         self.mean = mean
         self.std = std
@@ -72,7 +72,7 @@ class WideResNet(nn.Module):
         # global average pooling and classifier
         self.bn1 = nn.BatchNorm2d(nChannels[3])
         self.relu = nn.ReLU(inplace=True)
-        self.fc = nn.Linear(nChannels[3]*4, self.num_classes)
+        self.fc = nn.Linear(nChannels[3]*4, self._num_classes)
         self.nChannels = nChannels[3]*4
 
         for m in self.modules():
@@ -84,6 +84,15 @@ class WideResNet(nn.Module):
                 m.bias.data.zero_()
             elif isinstance(m, nn.Linear):
                 m.bias.data.zero_()
+    
+    @property
+    def num_classes(self):
+        return self._num_classes
+
+    @num_classes.setter
+    def num_classes(self, value):
+        self._num_classes = value
+        self.fc = nn.Linear(self.nChannels, self._num_classes).to(self.fc.weight.device)
 
     def forward(self, x):
         if self.norm == True:
@@ -156,10 +165,12 @@ class Bottleneck(nn.Module):
 class ResNet(nn.Module):
     def __init__(self, block, num_blocks, num_classes=10, norm = False, mean = None, std = None):
         super(ResNet, self).__init__()
+        self._num_classes = num_classes
         self.in_planes = 64
         self.norm = norm
         self.mean = mean
         self.std = std
+        self.block_expansion = block.expansion
 
         self.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(64)
@@ -167,7 +178,7 @@ class ResNet(nn.Module):
         self.layer2 = self._make_layer(block, 128, num_blocks[1], stride=2)
         self.layer3 = self._make_layer(block, 256, num_blocks[2], stride=2)
         self.layer4 = self._make_layer(block, 512, num_blocks[3], stride=2)
-        self.linear = nn.Linear(512*block.expansion*4, num_classes)
+        self.linear = nn.Linear(512*block.expansion*4, self._num_classes)
 
     def _make_layer(self, block, planes, num_blocks, stride):
         strides = [stride] + [1]*(num_blocks-1)
@@ -176,6 +187,15 @@ class ResNet(nn.Module):
             layers.append(block(self.in_planes, planes, stride))
             self.in_planes = planes * block.expansion
         return nn.Sequential(*layers)
+    
+    @property
+    def num_classes(self):
+        return self._num_classes
+
+    @num_classes.setter
+    def num_classes(self, value):
+        self._num_classes = value
+        self.fc = nn.Linear(512*self.block_expansion*4, self._num_classes).to(self.linear.weight.device)
 
     def forward(self, x):
         if self.norm == True:

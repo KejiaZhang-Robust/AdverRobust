@@ -238,7 +238,7 @@ class InceptionV3(nn.Module):
 
     def __init__(self, num_classes=100, norm = False, mean = None, std = None):
         super().__init__()
-        self.num_classes = num_classes
+        self._num_classes = num_classes
         self.norm = norm
         self.mean = mean
         self.std = std
@@ -270,7 +270,16 @@ class InceptionV3(nn.Module):
         #6*6 feature size
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.dropout = nn.Dropout2d()
-        self.linear = nn.Linear(2048, self.num_classes)
+        self.linear = nn.Linear(2048, self._num_classes)
+    
+    @property
+    def num_classes(self):
+        return self._num_classes
+
+    @num_classes.setter
+    def num_classes(self, value):
+        self._num_classes = value
+        self.fc = nn.Linear(self.nChannels, self._num_classes).to(self.linear.weight.device)
 
     def forward(self, x):
         if self.norm == True:
