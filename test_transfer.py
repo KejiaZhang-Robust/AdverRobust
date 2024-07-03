@@ -16,9 +16,9 @@ with open('configs_test_transfer.yml') as f:
     config = EasyDict(yaml.load(f,Loader=yaml.FullLoader))
 
 #TODO: Model generate the atack
-net = WRN34_10(Num_class=config.DATA.num_class)
+net = WRN34_10()
 #TODO: Model defense the atack
-test_net = ResNet18(Num_class=config.DATA.num_class)
+test_net = ResNet18()
 
 data_set = config.DATA.Data
 file_name_generate = config.Operation.Prefix_generate

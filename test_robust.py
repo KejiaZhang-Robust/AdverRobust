@@ -13,7 +13,7 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 with open('configs_test.yml') as f:
     config = EasyDict(yaml.load(f, Loader=yaml.FullLoader))
 
-net = ResNet18(Num_class=config.DATA.num_class)
+net = ResNet18()
 
 file_name = config.Operation.Prefix
 data_set = config.DATA.Data
@@ -34,10 +34,12 @@ logger.info(config.Operation.Record_string)
 
 norm_mean = torch.tensor(config.DATA.mean).to(device)
 norm_std = torch.tensor(config.DATA.std).to(device)
+
 net.num_classes = config.DATA.num_class
 net.norm = True
 net.mean = norm_mean
 net.std = norm_std
+
 Data_norm = False
 logger.info("Training Model:"+config.Operation.Prefix+" Robustness")
 

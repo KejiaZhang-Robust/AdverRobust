@@ -10,8 +10,8 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 with open('configs_train.yml') as f:
     config = EasyDict(yaml.load(f, Loader=yaml.FullLoader))
 
-# net = WRN34_10(Num_class=config.DATA.num_class)
-net = ResNet18(Num_class=config.DATA.num_class)
+# net = WRN34_10()
+net = ResNet18()
 
 file_name = config.Operation.Prefix
 data_set = config.Train.Data
