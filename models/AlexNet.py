@@ -29,7 +29,7 @@ class AlexNet_class(nn.Module):
     @num_classes.setter
     def num_classes(self, value):
         self._num_classes = value
-        self.fc = nn.Linear(512, self._num_classes).to(self.linear3.weight.device)
+        self.linear3 = nn.Linear(512, self._num_classes).to(self.linear3.weight.device)
 
     def forward(self, x):
         x = x.to(device)

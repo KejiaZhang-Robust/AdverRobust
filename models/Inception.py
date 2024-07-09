@@ -279,7 +279,7 @@ class InceptionV3(nn.Module):
     @num_classes.setter
     def num_classes(self, value):
         self._num_classes = value
-        self.fc = nn.Linear(self.nChannels, self._num_classes).to(self.linear.weight.device)
+        self.linear = nn.Linear(self.nChannels, self._num_classes).to(self.linear.weight.device)
 
     def forward(self, x):
         if self.norm == True:
