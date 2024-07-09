@@ -190,7 +190,7 @@ class ResNet_fsr(nn.Module):
         self.layer3 = self._make_layer(block, 256, num_blocks[2], stride=2)
         self.layer4 = self._make_layer(block, 512, num_blocks[3], stride=2)
         self.separation = Separation(size=(512, int(64 / 8), int(64 / 8)), tau=0.1)
-        self.recalibration = Recalibration(size=(512, int(64 / 8), int(8 / 8)))
+        self.recalibration = Recalibration(size=(512, int(64 / 8), int(64 / 8)))
         self.aux = nn.Sequential(nn.Linear(512, num_classes))
         self.linear = nn.Linear(512*block.expansion*4, self.num_classes)
 
