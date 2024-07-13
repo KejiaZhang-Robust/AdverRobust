@@ -65,7 +65,7 @@ class PreActResNet(nn.Module):
     def __init__(self, block, num_block, num_classes=100, norm = False, mean = None, std = None):
         super().__init__()
         self.input_channels = 64
-        self.num_classes = num_classes
+        self._num_classes = num_classes
         self.norm = norm
         self.mean = mean
         self.std = std
@@ -81,7 +81,7 @@ class PreActResNet(nn.Module):
         self.stage3 = self._make_layers(block, num_block[2], 256, 2)
         self.stage4 = self._make_layers(block, num_block[3], 512, 2)
 
-        self.linear = nn.Linear(self.input_channels, self.num_classes)
+        self.linear = nn.Linear(self.input_channels, self._num_classes)
 
     def _make_layers(self, block, block_num, out_channels, stride):
         layers = []
@@ -95,6 +95,15 @@ class PreActResNet(nn.Module):
             block_num -= 1
 
         return nn.Sequential(*layers)
+    
+    @property
+    def num_classes(self):
+        return self._num_classes
+
+    @num_classes.setter
+    def num_classes(self, value):
+        self._num_classes = value
+        self.linear = nn.Linear(self.input_channels, self._num_classes).to(self.linear.weight.device)
 
     def forward(self, x):
         if self.norm == True:

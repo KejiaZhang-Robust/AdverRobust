@@ -12,7 +12,6 @@ class AlexNet_class(nn.Module):
         self.norm = norm
         self.mean = mean
         self.std = std
-        self.num_classes = num_classes
         self.conv1 = nn.Conv2d(3, 32, kernel_size=3, padding=1, bias=False)
         self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1, bias=False)
         self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1, bias=False)
