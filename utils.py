@@ -31,37 +31,6 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 def load_txt(path :str) -> list:
     return [line.rstrip('\n') for line in open(path)]
-
-corruptions = load_txt('./data/corruptions.txt')
-
-class CIFAR10C(datasets.VisionDataset):
-    def __init__(self, root :str, name :str, 
-                 transform=None, target_transform=None):
-        # corruptions = load_txt('./src/corruptions.txt')
-        assert name in corruptions
-        super(CIFAR10C, self).__init__(
-            root, transform=transform,
-            target_transform=target_transform
-        )
-        data_path = os.path.join(root, name + '.npy')
-        target_path = os.path.join(root, 'labels.npy')
-        
-        self.data = np.load(data_path)
-        self.targets = np.load(target_path)
-        
-    def __getitem__(self, index):
-        img, targets = self.data[index], self.targets[index]
-        img = Image.fromarray(img)
-        
-        if self.transform is not None:
-            img = self.transform(img)
-        if self.target_transform is not None:
-            targets = self.target_transform(targets)
-            
-        return img, targets
-    
-    def __len__(self):
-        return len(self.data)
     
 class TinyImageNet(Dataset):
     def __init__(self, root_dir, mode='train', transform=None):
@@ -299,22 +268,6 @@ def create_dataloader(dataset, Norm):
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=100, shuffle=False, num_workers=4)
         return train_loader, test_loader
 
-    # if dataset == "CIFAR10-C":
-    #     if Norm == True:
-    #         transform_test = transforms.Compose([
-    #             transforms.ToTensor(),
-    #             transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2471, 0.2435, 0.2616)),
-    #         ])
-    #     else:
-    #         transform_test = transforms.Compose([
-    #             transforms.ToTensor(),
-    #         ])
-    #     corruptions = load_txt('./src/corruptions.txt')
-    #     test_dataset = CIFAR10C(os.path.join('./data', 'CIFAR-10-C'),
-    #                 corruptions, transform=transform_test
-    #             )
-    #     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=100, shuffle=False, num_workers=4)
-    #     return test_loader
 
 def create_loader_with_val_CIFAR_10(val_size=2000):
     transform_train = transforms.Compose([
