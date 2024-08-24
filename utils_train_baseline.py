@@ -12,9 +12,27 @@ import shutil
 from typing import Tuple
 from torch import Tensor
 from torch.autograd import Variable
-from utils_train import *
+from attacks import *
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+# PGD attack
+def pgd_attack(model: nn.Module, x: Tensor, y: Tensor, epsilon: float, alpha: float, iters: int) -> Tensor:
+    x_adv = x.detach() + torch.zeros_like(x).uniform_(-epsilon, epsilon)
+    x_adv = torch.clamp(x_adv, 0, 1)
+    criterion = nn.CrossEntropyLoss()
+
+    for _ in range(iters):
+        x_adv.requires_grad = True
+        logits = model(x_adv)
+        loss = criterion(logits, y)
+        grad = torch.autograd.grad(loss, x_adv)[0]
+
+        x_adv = x_adv.detach() + alpha * torch.sign(grad.detach())
+        x_adv = torch.min(torch.max(x_adv, x - epsilon), x + epsilon)
+        x_adv = torch.clamp(x_adv, 0, 1)
+
+    return x_adv.detach()
 
 #TODO: MART
 def train_adversarial_MART(net: nn.Module, epoch: int, train_loader: DataLoader, optimizer: Optimizer,

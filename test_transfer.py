@@ -1,12 +1,11 @@
 import torch.backends.cudnn as cudnn
 
 from models import *
-from utils_test_transfer import evaluate_pgd, test_adv_auto, evaluate_normal, evaluate_cw
+from attacks import *
 from easydict import EasyDict
 import yaml
 import os
 import logging
-
 
 from utils import *
 
@@ -95,7 +94,7 @@ if config.Operation.Validate_Best == True:
         logger.info(f"CW_attack:[nb_iter:{config.ADV.iter},eps:{config.ADV.clip_eps},step_size:{config.ADV.fgsm_step}]->cw_acc: {pgd_acc: .2f}" + "\n")
     if config.Operation.Validate_Autoattack:
         ##----->Autoattack
-        auto_acc = test_adv_auto(net, test_net, test_loader, config.ADV.clip_eps, auto_attacks_methods)
+        auto_acc = evaluate_autoattack_transfer(net, test_net, test_loader, config.ADV.clip_eps, auto_attacks_methods)
         logger.info(f"Auto_attack:[eps:{config.ADV.clip_eps},step_size:{config.ADV.fgsm_step}]->pgd_acc: {auto_acc: .2f}" + "\n")
 
 if config.Operation.Validate_Last == True:
@@ -120,5 +119,5 @@ if config.Operation.Validate_Last == True:
         logger.info(f"CW_attack:[nb_iter:{config.ADV.iter},eps:{config.ADV.clip_eps},step_size:{config.ADV.fgsm_step}]->cw_acc: {pgd_acc: .2f}" + "\n")
     if config.Operation.Validate_Autoattack:
         ##----->Autoattack
-        auto_acc = test_adv_auto(net, test_net, test_loader, config.ADV.clip_eps, auto_attacks_methods)
+        auto_acc = evaluate_autoattack_transfer(net, test_net, test_loader, config.ADV.clip_eps, auto_attacks_methods)
         logger.info(f"Auto_attack:[eps:{config.ADV.clip_eps},step_size:{config.ADV.fgsm_step}]->pgd_acc: {auto_acc: .2f}" + "\n")

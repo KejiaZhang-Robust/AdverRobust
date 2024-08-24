@@ -11,8 +11,11 @@ Operation:
   #Test attack Choosing
   Validate_Natural: True
   Validate_PGD: True
+  Validate_EOT_PGD: True
+  Validate_EOT_PGD_L2: True
   Validate_CW: True
   Validate_Autoattack: True
+  Validate_Autoattack_L2: True
 DATA:
   #Dataset [CIAFR10,CIFAR100,TinyImageNet,Imagenette]
   Data: "CIFAR10"
@@ -25,6 +28,7 @@ ADV:
   # FGSM parameters during training
   clip_eps: 8
   fgsm_step: 2
+  eot: 2
   # PGD attack parameters used during validation
   # the same clip_eps as above is used for PGD
   pgd_test:
