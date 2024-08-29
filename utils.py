@@ -148,6 +148,88 @@ def format_time(seconds):
         i += 1
     return f
 
+def _load_dataset(
+        dataset: Dataset,
+        n_examples: Optional[int] = None) -> Tuple[torch.Tensor, torch.Tensor]:
+    batch_size = 100
+    test_loader = data.DataLoader(dataset,
+                                  batch_size=batch_size,
+                                  shuffle=False,
+                                  num_workers=4)
+
+    x_test, y_test = [], []
+    for i, (x, y) in enumerate(test_loader):
+        x_test.append(x)
+        y_test.append(y)
+        if n_examples is not None and batch_size * i >= n_examples:
+            break
+    x_test_tensor = torch.cat(x_test)
+    y_test_tensor = torch.cat(y_test)
+
+    if n_examples is not None:
+        x_test_tensor = x_test_tensor[:n_examples]
+        y_test_tensor = y_test_tensor[:n_examples]
+
+    return x_test_tensor, y_test_tensor
+
+def load_dataset_example(dataset: str, train: bool = False, n_examples: Optional[int] = None):
+    # Common transformations
+    common_train_transforms = [
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+    ]
+    
+    common_test_transforms = [
+        transforms.ToTensor(),
+    ]
+    
+    # Dataset-specific transformations and loading functions
+    dataset_params = {
+        "TinyImageNet": {
+            "train_transform": transforms.Compose([
+                transforms.RandomCrop(64, padding=8)
+            ] + common_train_transforms),
+            "test_transform": transforms.Compose(common_test_transforms),
+            "train_loader": lambda: TinyImageNet('./data/tiny-imagenet-200', 'train', transform=dataset_params["TinyImageNet"]["train_transform"]),
+            "test_loader": lambda: TinyImageNet('./data/tiny-imagenet-200', 'val', transform=dataset_params["TinyImageNet"]["test_transform"]),
+        },
+        "Imagenette": {
+            "train_transform": transforms.Compose([
+                transforms.RandomCrop(160)
+            ] + common_train_transforms),
+            "test_transform": transforms.Compose([
+                transforms.CenterCrop(160)
+            ] + common_test_transforms),
+            "train_loader": lambda: Read_Dataset(root_dir='./data/imagenette2-160', mode='train', transform=dataset_params["Imagenette"]["train_transform"]),
+            "test_loader": lambda: Read_Dataset(root_dir='./data/imagenette2-160', mode='val', transform=dataset_params["Imagenette"]["test_transform"]),
+        },
+        "CIFAR10": {
+            "train_transform": transforms.Compose([
+                transforms.RandomCrop(32)
+            ] + common_train_transforms),
+            "test_transform": transforms.Compose(common_test_transforms),
+            "train_loader": lambda: torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=dataset_params["CIFAR10"]["train_transform"]),
+            "test_loader": lambda: torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=dataset_params["CIFAR10"]["test_transform"]),
+        },
+        "CIFAR100": {
+            "train_transform": transforms.Compose([
+                transforms.RandomCrop(32, padding=4)
+            ] + common_train_transforms),
+            "test_transform": transforms.Compose(common_test_transforms),
+            "train_loader": lambda: torchvision.datasets.CIFAR100(root='./data', train=True, download=True, transform=dataset_params["CIFAR100"]["train_transform"]),
+            "test_loader": lambda: torchvision.datasets.CIFAR100(root='./data', train=False, download=True, transform=dataset_params["CIFAR100"]["test_transform"]),
+        }
+    }
+    
+    assert dataset in dataset_params, f"Unknown dataset: {dataset}"
+    
+    if train:
+        dataset_instance = dataset_params[dataset]["train_loader"]()
+    else:
+        dataset_instance = dataset_params[dataset]["test_loader"]()
+
+    return _load_dataset(dataset_instance, n_examples)
+
 def create_dataloader(dataset, Norm):
     if dataset == "TinyImageNet":
         if Norm == True:
