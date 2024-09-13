@@ -4,14 +4,19 @@ import yaml
 import logging
 from models import *
 from utils_train import *
+from utils_train_baseline import *
 from utils import *
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 with open('configs_train.yml') as f:
     config = EasyDict(yaml.load(f, Loader=yaml.FullLoader))
 
-# net = WRN34_10()
-net = ResNet18()
+if config.Train.Train_Net == 'WRN34-10':
+    net = WRN34_10()
+elif config.Train.Train_Net == 'ResNet-18':
+    net = ResNet18()
+elif config.Train.Train_Net == 'XXXX':
+    pass
 
 file_name = config.Operation.Prefix
 data_set = config.Train.Data
@@ -76,7 +81,22 @@ for epoch in range(start_epoch + 1, config.Train.Epoch + 1):
         acc_train, train_loss = train_adversarial_TRADES(net, epoch, train_loader, optimizer, config)
         acc_test, pgd_acc, loss_test, best_prec1 = test_net_robust(net, test_loader, epoch, optimizer, best_prec1, config, save_path=check_path)
         logger.info('%-5d\t%-10.2f\t%-9.2f\t%-9.2f\t%-8.2f\t%.2f', epoch, train_loss, acc_train, loss_test,
-                    acc_test, pgd_acc) 
+                    acc_test, pgd_acc)
+    elif config.Train.Train_Method == 'MART':
+        acc_train, train_loss = train_adversarial_MART(net, epoch, train_loader, optimizer, config)
+        acc_test, pgd_acc, loss_test, best_prec1 = test_net_robust(net, test_loader, epoch, optimizer, best_prec1, config, save_path=check_path)
+        logger.info('%-5d\t%-10.2f\t%-9.2f\t%-9.2f\t%-8.2f\t%.2f', epoch, train_loss, acc_train, loss_test,
+                    acc_test, pgd_acc)
+    elif config.Train.Train_Method == 'FSR':
+        acc_train, train_loss = train_adversarial_fsr(net, epoch, train_loader, optimizer, config)
+        acc_test, pgd_acc, loss_test, best_prec1 = test_net_robust(net, test_loader, epoch, optimizer, best_prec1, config, save_path=check_path)
+        logger.info('%-5d\t%-10.2f\t%-9.2f\t%-9.2f\t%-8.2f\t%.2f', epoch, train_loss, acc_train, loss_test,
+                    acc_test, pgd_acc)
+    elif config.Train.Train_Method == 'FPCM':
+        acc_train, train_loss = train_adversarial_fpcm(net, epoch, train_loader, optimizer, config)
+        acc_test, pgd_acc, loss_test, best_prec1 = test_net_robust(net, test_loader, epoch, optimizer, best_prec1, config, save_path=check_path)
+        logger.info('%-5d\t%-10.2f\t%-9.2f\t%-9.2f\t%-8.2f\t%.2f', epoch, train_loss, acc_train, loss_test,
+                    acc_test, pgd_acc)
     else:
         acc_train, train_loss = train(net, epoch, train_loader, optimizer, config)
         acc_test, pgd_acc, loss_test, best_prec1 = test_net_normal(net, test_loader, epoch, optimizer, best_prec1, config, save_path=check_path)

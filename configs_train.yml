@@ -29,12 +29,6 @@ DATA:
   # CIFAR-10
   mean: !!python/tuple [0.4914, 0.4822, 0.4465]
   std: !!python/tuple [0.2471, 0.2435, 0.2616]
-  # # CIFAR-100
-  # mean: !!python/tuple [0.5071, 0.4867, 0.4408]
-  # std: !!python/tuple [0.2675, 0.2565, 0.2761]
-  # # TinyImageNet & Imagenette
-  # mean: !!python/tuple [0.485, 0.456, 0.406]
-  # std: !!python/tuple [0.229, 0.224, 0.225]
 ADV:
   # FGSM parameters during training
   clip_eps: 8
