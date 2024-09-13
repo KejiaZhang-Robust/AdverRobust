@@ -81,7 +81,7 @@ Train:
   Epoch: 110
   # Initial learning rate
   Lr: 0.1
-  # Factor for learning rate adjustment (if applicable)
+  # Factor for label smoothing (if applicable)
   Factor: 0
   # Parameters for adversarial training: epsilon clipping, FGSM steps, PGD steps
   clip_eps: 8
