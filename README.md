@@ -38,7 +38,7 @@ To get started with AdverRobust, you need to set up your environment with the ne
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/your-username/AdverRobust.git
+   git clone https://github.com/KejiaZhang-Robust/AdverRobust
    cd AdverRobust
    ```
 
