@@ -1,7 +1,6 @@
 <img src="images/README/AdverRobust.png" alt="AdverRobust Logo" style="width: 300px; float: left; margin-right: 20px;">
 
 <br>
-<br>
 
 # **AdverRobust: An Adversarial Training Framework for Adversarial Robustness in Deep Learning Models**
 
