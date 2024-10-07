@@ -18,4 +18,3 @@ dependencies:
       - torchaudio == 2.4.0
       - requests
       - tdqm
-      - Pyyaml
