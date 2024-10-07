@@ -1,20 +1,21 @@
 name: at_robust
 channels:
   - pytorch
+  - nvidia
   - defaults
 dependencies:
-  - python=3.11.5
-  - pytorch-cuda=12.1
+  - python=3.11
   - pytorch=2.4.0
-  - torchvision=0.18.0
-  - numpy=1.24.3
+  - torchvision=0.19.0
+  - pytorch-cuda=12.1
+  - numpy
   - pip:
-      - easydict == 1.10
-      - pillow == 9.4.0
-      - pyyaml == 6.0
-      - scipy == 1.10.1
-      - scikit-learn == 1.2.2
-      - torchaudio == 2.3.0
-      - requests == 2.29.0
-      - tdqm == 4.65.0
-      - Pyyaml == 0.2.5
+      - easydict
+      - pillow
+      - pyyaml
+      - scipy
+      - scikit-learn
+      - torchaudio == 2.4.0
+      - requests
+      - tdqm
+      - Pyyaml
