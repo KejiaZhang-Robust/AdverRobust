@@ -3,6 +3,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchvision import transforms
 
+from .utils import *
+
 class PatchEmbedding(nn.Module):
     def __init__(self, img_size, patch_size, in_channels, embed_dim):
         super(PatchEmbedding, self).__init__()
@@ -48,9 +50,13 @@ class TransformerEncoderLayer(nn.Module):
         return x
 
 class VisionTransformer(nn.Module):
-    def __init__(self, img_size, patch_size, in_channels, embed_dim, num_heads, num_layers, num_classes=10):
+    def __init__(self, img_size, patch_size, in_channels, embed_dim, num_heads, num_layers, 
+                 num_classes=10, norm = False, mean = None, std = None):
         super(VisionTransformer, self).__init__()
         self._num_classes = num_classes
+        self.norm = norm
+        self.mean = mean
+        self.std = std
         self.embed_dim = embed_dim
         self.patch_embedding = PatchEmbedding(img_size, patch_size, in_channels, self.embed_dim)
         self.encoder = nn.Sequential(
@@ -69,15 +75,19 @@ class VisionTransformer(nn.Module):
         self.head = nn.Linear(self.embed_dim, self._num_classes)
         
     def forward(self, x):
+        if self.norm == True:
+            x = Normalization(x, self.mean, self.std)
         x = self.patch_embedding(x)
         x = self.encoder(x)
         x = x[:, 0]  # Select the CLS token
-        x = self.pool(x.unsqueeze(1)).squeeze(1)
+        # x = self.pool(x.unsqueeze(1)).squeeze(1)
         x = self.head(x)
         return x
 
-def ViT_B16(num_classes=10):
-    return VisionTransformer(img_size=224, patch_size=16, in_channels=3, embed_dim=768, num_heads=12, num_layers=12, num_classes=num_classes)
+def ViT_B16(num_classes=10, Norm=True, norm_mean=None, norm_std=None):
+    return VisionTransformer(img_size=224, patch_size=16, in_channels=3, embed_dim=768, num_heads=12, num_layers=12, 
+                             num_classes=num_classes, norm=Norm, mean=norm_mean, std=norm_std)
 
-def ViT_B32(num_classes=10):
-    return VisionTransformer(img_size=224, patch_size=32, in_channels=3, embed_dim=768, num_heads=12, num_layers=12, num_classes=num_classes)
+def ViT_B32(num_classes=10, Norm=True, norm_mean=None, norm_std=None):
+    return VisionTransformer(img_size=224, patch_size=32, in_channels=3, embed_dim=768, num_heads=12, num_layers=12, 
+                             num_classes=num_classes, norm=Norm, mean=norm_mean, std=norm_std)
