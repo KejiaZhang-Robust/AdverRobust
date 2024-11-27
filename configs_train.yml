@@ -1,5 +1,5 @@
 Operation:
-  #Name
+  #Name - Specify your network
   Prefix: "WRN34_10"
   #record
   record_words: ""
