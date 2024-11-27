@@ -140,7 +140,7 @@ python train_model.py
 
 This command will initiate the training process using the parameters specified in the `configs_train.yml` file. Make sure you have all the dependencies installed and the appropriate environment set up as mentioned in the **Installation** section.
 
-By following these steps, you can effectively utilize the AdverRobust framework for adversarial training and robustness evaluation of deep learning models.
+By following these steps, you can utilize the AdverRobust framework for adversarial training and robustness evaluation of deep learning models.
 
 Here's a revised version for the **Testing Robust Performance** section:
 
