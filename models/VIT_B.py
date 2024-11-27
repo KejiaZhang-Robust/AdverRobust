@@ -79,7 +79,7 @@ class VisionTransformer(nn.Module):
             x = Normalization(x, self.mean, self.std)
         x = self.patch_embedding(x)
         x = self.encoder(x)
-        x = x[:, 0]  # Select the CLS token
+        x = x[:, 0] 
         # x = self.pool(x.unsqueeze(1)).squeeze(1)
         x = self.head(x)
         return x
