@@ -1,7 +1,6 @@
 name: at_robust
 channels:
   - pytorch
-  - nvidia
   - defaults
 dependencies:
   - python=3.11
